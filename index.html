@@ -308,7 +308,7 @@ function propSvg(k){
 const PROP_BEHIND={};
 
 /* ---------- body shapes: Blu himself transforms (no props) ---------- */
-const BODIES={flame:"Classic",bot:"Robot",vector:"Being edited",bubble:"Chat bubble"};
+const BODIES={flame:"Classic",bot:"Robot",vector:"Being edited",bubble:"Chat bubble",story:"Stories",viral:"Viral"};
 const SEG1=[[61.1851,43.6109],[-36.1921,198.103],[63.5888,331],[189.288,331]];
 const SEG2=[[189.288,331],[315.057,331],[388.935,216.612],[296.727,46.2577]];
 function bz(s,t){const u=1-t;return [0,1].map(k=>u*u*u*s[0][k]+3*u*u*t*s[1][k]+3*u*t*t*s[2][k]+t*t*t*s[3][k]);}
@@ -322,6 +322,17 @@ function botBody(p,id,shadow){
 ${shadow?`<clipPath id="cb${id}"><path d="${BOX_FRONT}"/></clipPath><g clip-path="url(#cb${id})"><path d="${BOX_FRONT}" fill="${shade(p.mid,.14)}"/><path d="${BOX_FRONT}" transform="translate(12 -12)" fill="${p.mid}"/></g>`:`<path d="${BOX_FRONT}" fill="${p.mid}"/>`}
 <path d="M242 110H280L224 310H186L242 110Z" fill="white" fill-opacity="0.5"/><path d="M227 110H233L177 310H171L227 110Z" fill="white" fill-opacity="0.5"/>
 <path d="${BOX_FRONT}" stroke="${INK}" stroke-width="8" fill="none"/></g>`;
+}
+function echoes(p){
+  const one=(tx,ty,s)=>`<g transform="translate(${tx} ${ty}) scale(${s})"><path d="${P_OUT}" fill="${p.mid}" stroke="${INK}" stroke-width="${8/s}" stroke-linejoin="round"/><path d="${P_LIGHT}" fill="${p.light}"/></g>`;
+  return one(-26,150,.5)+one(196,150,.5);
+}
+function storyWrap(inner,p,id){
+  const cx=173,cy=158;
+  return `<defs><linearGradient id="sg${id}" x1="0" y1="340" x2="347" y2="-30" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9BCEF1"/><stop offset=".5" stroke-opacity="1" stop-color="#4795E0"/><stop offset="1" stop-color="#2F6FD0"/></linearGradient><clipPath id="sc${id}"><circle cx="${cx}" cy="${cy}" r="156"/></clipPath></defs>
+<circle cx="${cx}" cy="${cy}" r="180" fill="none" stroke="url(#sg${id})" stroke-width="18"/>
+<circle cx="${cx}" cy="${cy}" r="164" fill="#fff"/><circle cx="${cx}" cy="${cy}" r="156" fill="#DCEEFC"/>
+<g clip-path="url(#sc${id})"><g transform="translate(14 30) scale(.92)">${inner}</g></g>`;
 }
 function selection(){
   const S="#0D99FF",x0=8,y0=-4,x1=352,y1=342;
@@ -398,8 +409,9 @@ function draw(c,withBg){
   const face=(mouth(c.mouth)+eyes(c.eyes,id)).replaceAll(`transform="${FACE}"`,`transform="${ft}"`);
   const ex=extras(x);
   const extra=artDefs(face+ex);
-  const torso=body==="bot"?botBody(p,id,sh):flame(p,id,sh)+(body==="bubble"?bubbleTail(p):"");
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh).replace("</defs>",extra+"</defs>")}${bg}<g id="cold-flame">${c.top==="antenna"?topper("antenna"):""}${PROP_BEHIND[c.prop]?propSvg(c.prop):""}${torso}${face}${x.ear!==false?ear(p,id,sh):""}${c.top!=="antenna"?topper(c.top):""}${c.prop&&c.prop!=="none"&&!PROP_BEHIND[c.prop]?propSvg(c.prop):""}${ex}${body==="vector"?selection():""}</g></svg>`;
+  const torso=(body==="bot"?botBody(p,id,sh):flame(p,id,sh)+(body==="bubble"?bubbleTail(p):""));
+  const inner=`${c.top==="antenna"?topper("antenna"):""}${PROP_BEHIND[c.prop]?propSvg(c.prop):""}${torso}${face}${x.ear!==false?ear(p,id,sh):""}${c.top!=="antenna"?topper(c.top):""}${c.prop&&c.prop!=="none"&&!PROP_BEHIND[c.prop]?propSvg(c.prop):""}${ex}${body==="vector"?selection():""}`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh).replace("</defs>",extra+"</defs>")}${bg}<g id="cold-flame">${body==="story"?storyWrap(inner,p,id):body==="viral"?echoes(p)+`<g transform="translate(40 38) scale(.8)">${inner}</g>`:inner}</g></svg>`;
 }
 
 

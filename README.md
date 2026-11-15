@@ -31,7 +31,7 @@ Blu Studio is the shortcut. You pick the mood, and he's ready.
 
 | | |
 |---|---|
-| **Body** | Classic, Robot (a boxy bot with his flame poking out the top), Being edited (selected like a vector in Figma) or Chat bubble. Blu changes shape instead of holding props. |
+| **Body** | Classic, Robot (a boxy bot with his flame poking out the top), Being edited (selected like a vector in Figma), Chat bubble, Stories (a profile picture with a story ring) or Viral (with two copies of himself). Blu changes shape instead of holding props. |
 | **Colour** | Brand blue plus seven more. Each recolours his three flame tones and his ear together, so he always looks like himself. |
 | **Eyes** | His original shades, or googly, hearts, happy, laughing, wink, shocked and angry. |
 | **Mouth** | His original smirk, or smile, sweet, laugh, kiss, scream, gritted, or none. |
