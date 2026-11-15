@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Blu Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: Figma-like editor — slim top bar, left panel (presets + saved), canvas, right properties panel */
+:root{
+  --bg:#F5F5F5; --panel:#FFFFFF; --ink:#1E1E1E; --soft:#6B6B6B; --faint:#A3A3A3; --line:#E6E6E6;
+  --hover:#F2F2F2; --sel:#EAF3FD; --brand:#4795E0; --canvas:#EDEDED;
+  --font:"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1E1E1E; --panel:#2C2C2C; --ink:#F0F0F0; --soft:#B3B3B3; --faint:#7A7A7A; --line:#3A3A3A;
+  --hover:#363636; --sel:#22384F; --brand:#6FB2E8; --canvas:#1E1E1E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1E1E1E; --panel:#2C2C2C; --ink:#F0F0F0; --soft:#B3B3B3; --faint:#7A7A7A; --line:#3A3A3A;
+  --hover:#363636; --sel:#22384F; --brand:#6FB2E8; --canvas:#1E1E1E; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:12px;line-height:1.4;-webkit-font-smoothing:antialiased}
+.app{height:100%;display:grid;grid-template-rows:48px minmax(0,1fr)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--panel);border-bottom:1px solid var(--line);
+  padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;min-width:0}
+.brand svg{width:22px;height:22px;flex:none}
+.brand span{color:var(--faint);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;align-items:center;gap:6px}
+.tb{height:30px;padding:0 10px;border-radius:6px;border:0;background:none;color:var(--ink);font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.tb:hover{background:var(--hover)}
+.tb svg{width:16px;height:16px}
+.tb.primary{background:var(--brand);color:#fff}
+.tb.primary:hover{opacity:.9;background:var(--brand)}
+.body{display:grid;grid-template-columns:220px minmax(0,1fr) 288px;min-height:0}
+.side{background:var(--panel);overflow:auto;min-height:0}
+.left{border-right:1px solid var(--line)}
+.right{border-left:1px solid var(--line)}
+.sec{padding:12px 12px 14px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.sec:last-child{border-bottom:0}
+.sec-h{display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:11px;color:var(--ink)}
+.sec-h small{font-weight:400;color:var(--faint);font-size:11px}
+.list{display:flex;flex-direction:column;gap:1px}
+.li{display:flex;align-items:center;gap:8px;height:32px;padding:0 6px;border-radius:6px;border:0;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer;width:100%}
+.li:hover{background:var(--hover)}
+.li[aria-pressed="true"]{background:var(--sel)}
+.li .th{width:24px;height:24px;border-radius:6px;overflow:hidden;flex:none;display:grid;place-items:center}
+.li .th svg{width:24px;height:24px}
+.saved{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.sv{position:relative;aspect-ratio:1/1;border-radius:8px;border:1px solid var(--line);overflow:hidden;cursor:pointer;padding:0}
+.sv svg{width:100%;height:100%;display:block}
+.sv .x{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:4px;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:11px;line-height:16px;display:none;cursor:pointer;padding:0}
+.sv:hover .x,.sv:focus-within .x{display:block}
+.empty{color:var(--faint)}
+.canvas{position:relative;background:var(--canvas);display:grid;place-items:center;overflow:auto;padding:32px;min-height:0;
+  background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:16px 16px}
+.frame-label{position:absolute;top:16px;left:20px;color:var(--soft);font-size:11px}
+.artboard{width:min(420px,100%);aspect-ratio:1/1;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08);display:grid;place-items:center;overflow:hidden;background:var(--panel)}
+.artboard svg{width:100%;height:100%;display:block}
+.status{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:6px 12px;border-radius:8px;font-size:12px;white-space:nowrap}
+.status:empty{display:none}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.opt{aspect-ratio:1/1;border-radius:8px;border:1px solid transparent;background:var(--hover);padding:2px;cursor:pointer;display:grid;place-items:center;position:relative}
+.opt:hover{border-color:var(--line)}
+.opt[aria-pressed="true"]{border-color:var(--brand);background:var(--sel)}
+.opt svg{width:100%;height:100%}
+.sw-row{display:flex;flex-wrap:wrap;gap:6px}
+.sw{width:24px;height:24px;border-radius:6px;border:1px solid rgba(0,0,0,.08);padding:0;cursor:pointer}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--brand)}
+.sw.none{background:repeating-linear-gradient(45deg,var(--line) 0 3px,var(--panel) 3px 6px)}
+.toggles{display:flex;flex-direction:column;gap:1px}
+.tg{display:flex;align-items:center;justify-content:space-between;height:30px;padding:0 6px;border-radius:6px;border:0;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.tg:hover{background:var(--hover)}
+.tg .sw-i{width:28px;height:16px;border-radius:8px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.tg .sw-i::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tg[aria-pressed="true"] .sw-i{background:var(--brand)}
+.tg[aria-pressed="true"] .sw-i::after{transform:translateX(12px)}
+.cur{color:var(--soft);font-weight:400}
+textarea{width:100%;height:90px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:11px ui-monospace,monospace;padding:6px}
+.artboard.transparent{background-color:#fff!important;background-image:linear-gradient(45deg,#E9E9E9 25%,transparent 25%,transparent 75%,#E9E9E9 75%),linear-gradient(45deg,#E9E9E9 25%,transparent 25%,transparent 75%,#E9E9E9 75%);background-size:16px 16px;background-position:0 0,8px 8px}
+.field{display:flex;flex-direction:column;gap:6px}
+.input{height:32px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;padding:0 8px;width:100%}
+.input:focus{border-color:var(--brand);outline:none}
+.fig-btn{height:32px;border-radius:6px;border:0;background:var(--ink);color:var(--panel);font:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.fig-btn:disabled{opacity:.5;cursor:default}
+.fig-msg{color:var(--soft);min-height:16px}
+.fig-msg a{color:var(--brand)}
+.muted{color:var(--faint)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+@media (max-width:900px){
+  .app{height:auto}
+  .body{grid-template-columns:minmax(0,1fr)}
+  .canvas{order:-1;min-height:360px;padding:20px}
+  .left,.right{border:0;border-top:1px solid var(--line)}
+  .grid{grid-template-columns:repeat(5,1fr)}
+  .side{padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+}
+@media (max-width:520px){.tb .lbl{display:none}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand" id="brand">Blu Studio <span>/ mascot builder</span></div>
+    <div class="tools">
+      <button class="tb" id="random" type="button" title="Surprise me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg><span class="lbl">Surprise me</span></button>
+      <button class="tb" id="save" type="button" title="Save version"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg><span class="lbl">Save</span></button>
+      <button class="tb" id="copyPng" type="button" title="Copy PNG"><span class="lbl">Copy PNG</span><span class="lbl" aria-hidden="true" hidden></span></button>
+      <button class="tb primary" id="copySvg" type="button" title="Copy SVG for Figma">Copy SVG</button>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="side left" aria-label="Presets and saved">
+      <div class="sec"><div class="sec-h">Presets</div><div class="list" id="presets"></div></div>
+      <div class="sec"><div class="sec-h">Saved <small>this browser</small></div><div class="saved" id="saved"></div></div>
+    </aside>
+
+    <main class="canvas" aria-label="Canvas">
+      <div class="frame-label" id="flabel">cold-flame</div>
+      <div class="artboard" id="tile"></div>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+    </main>
+
+    <aside class="side right" aria-label="Properties">
+      <div class="sec"><div class="sec-h">Colour <small class="cur" id="c-color"></small></div><div class="sw-row" id="o-color"></div></div>
+      <div class="sec"><div class="sec-h">Eyes <small class="cur" id="c-eyes"></small></div><div class="grid" id="o-eyes"></div></div>
+      <div class="sec"><div class="sec-h">Mouth <small class="cur" id="c-mouth"></small></div><div class="grid" id="o-mouth"></div></div>
+      <div class="sec"><div class="sec-h">On top <small class="cur" id="c-top"></small></div><div class="grid" id="o-top"></div></div>
+      <div class="sec"><div class="sec-h">Extras</div><div class="toggles" id="o-extras"></div></div>
+      <div class="sec"><div class="sec-h">Background <small class="cur" id="c-bg"></small></div><div class="sw-row" id="o-bg"></div></div>
+      <div class="sec" id="figsec">
+        <div class="sec-h">Place in Figma <small id="figstate">connector</small></div>
+        <div class="field">
+          <input class="input" id="figlink" type="url" placeholder="Paste a Figma file or frame link" aria-label="Figma file or frame link">
+          <button class="fig-btn" id="figplace" type="button">Place in Figma</button>
+          <div class="fig-msg" id="figmsg" role="status" aria-live="polite"><span class="muted">Adds the character as editable vectors next to what's there. Uses the current background, or none if Transparent.</span></div>
+        </div>
+      </div>
+      <div class="sec" id="fbsec" hidden><div class="sec-h">SVG code</div><textarea id="fallback" aria-label="SVG code"></textarea></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+
+(function(){
+const INK="#1F2024";
+/* exact colours from the Figma component; others follow the same 4-tone structure */
+const PAL={
+  blue:{n:"Brand blue",base:"#4795E0",mid:"#9BCEF1",light:"#CAE9FA",ear:"#6FB2E8"},
+  purple:{n:"Purple",base:"#8B7BEF",mid:"#C3B8FA",light:"#E3DEFF",ear:"#A698F5"},
+  orange:{n:"Orange",base:"#F7922A",mid:"#FFCB86",light:"#FFE6C2",ear:"#FBAE57"},
+  red:{n:"Red",base:"#EE3D4B",mid:"#FF969E",light:"#FFCDD1",ear:"#F4646F"},
+  yellow:{n:"Yellow",base:"#F2C232",mid:"#FFE48F",light:"#FFF2C7",ear:"#F7D265"},
+  pink:{n:"Pink",base:"#F25B9D",mid:"#FFA8CD",light:"#FFD8EA",ear:"#F67FB3"},
+  green:{n:"Green",base:"#3FB874",mid:"#A6E6C0",light:"#D6F5E3",ear:"#6BCB95"},
+  grey:{n:"Grey",base:"#9DA4AE",mid:"#D3D7DD",light:"#ECEEF1",ear:"#B6BCC4"}
+};
+const BG={none:"",pink:"#F6D8D6",sky:"#9ECFF2",mint:"#93E3BE",butter:"#F8E07A",orchid:"#FF8FE8",hotpink:"#FF5AA0",tangerine:"#E9832B",cherry:"#FF2350",cobalt:"#1756C8",lime:"#86E07E",fog:"#B4B4B4"};
+const EYES={shades:"Shades",visor:"Visor",big:"Big eyes",hearts:"Hearts",happy:"Happy",wink:"Wink",crying:"Crying",angry:"Angry",glasses:"Glasses",dizzy:"Dizzy",stars:"Star eyes"};
+const MOUTHS={hi:"Original",smile:"Smile",grin:"Grin",wow:"Wow",tongue:"Tongue",flat:"Flat",none:"None"};
+const TOPS={none:"None",party:"Party hat",crown:"Crown",halo:"Halo",bow:"Bow",cap:"Cap"};
+const EXTRAS={ear:"Ear knob",blush:"Blush",hearts:"Floating hearts",sweat:"Sweat drop",sparkles:"Sparkles",bandage:"Bandage",shadow:"Inner shadow"};
+
+const BRAND={color:"blue",eyes:"shades",mouth:"hi",top:"none",bg:"pink",extras:{ear:true,shadow:true}};
+const PRESETS=[
+  {n:"Blu",c:BRAND},
+  {n:"In love",c:{color:"blue",eyes:"hearts",mouth:"smile",top:"none",bg:"mint",extras:{ear:true,shadow:true,blush:true,hearts:true}}},
+  {n:"Party",c:{color:"blue",eyes:"happy",mouth:"tongue",top:"party",bg:"butter",extras:{ear:true,shadow:true,sparkles:true}}},
+  {n:"Champion",c:{color:"blue",eyes:"stars",mouth:"grin",top:"crown",bg:"cobalt",extras:{ear:true,shadow:true,sparkles:true}}},
+  {n:"Oops",c:{color:"blue",eyes:"crying",mouth:"wow",top:"none",bg:"sky",extras:{ear:true,shadow:true,sweat:true}}},
+  {n:"Angry red",c:{color:"red",eyes:"angry",mouth:"grin",top:"none",bg:"tangerine",extras:{ear:true,shadow:true,bandage:true}}}
+];
+let S=JSON.parse(JSON.stringify(BRAND));
+let uid=0;
+
+/* ---------- exact geometry from the Figma "cold-flame" component (viewBox 347x340) ---------- */
+const P_OUT="M93.9427 107.339C59.7755 113.789 59.0394 72.0454 63.0859 44.2497C63.2426 43.1737 61.7649 42.6911 61.1851 43.6109C-36.1921 198.103 63.5888 331 189.288 331C315.057 331 388.935 216.612 296.727 46.2577C296.21 45.3025 294.668 45.6944 294.72 46.7794C296.115 76.1271 282.982 99.8573 255.075 92.2255C215.938 81.5229 256.475 24.1551 194.512 6.54046C193.72 6.31533 192.971 7.09292 193.264 7.86242C203.819 35.6017 197.256 60.9982 164.296 64.9048C131.456 68.797 123.061 44.719 131.223 15.7662C131.463 14.9147 130.542 14.1979 129.776 14.6402C88.4173 38.5124 130.823 100.377 93.9427 107.339Z";
+const P_MID="M156.148 84.4027C174.748 148.841 85.102 168.497 55.8387 115.603C54.887 113.883 52.1583 114.237 51.8352 116.177C32.5619 231.848 116.583 325.996 206.5 321.007C301.307 315.746 360.635 174.571 294.346 111.17C293.548 110.407 292.21 110.517 291.455 111.321C230.135 176.593 221.216 74.6245 157.822 81.7864C156.597 81.9247 155.806 83.2185 156.148 84.4027Z";
+const P_LIGHT="M211.77 128.988C205.685 179.482 272.264 184.465 289.137 142.406C289.877 140.562 292.7 140.504 293.273 142.407C319.289 228.861 267.592 310.339 200.707 316.079C129.937 322.151 70.3627 220.336 111.892 164.331C112.567 163.421 113.939 163.336 114.814 164.054C166.914 206.803 162.612 128.534 209.747 126.682C210.966 126.634 211.916 127.777 211.77 128.988Z";
+const P_MOUTH="M251.375 226.5C255.794 226.5 259.484 230.146 258.322 234.408C254.852 247.14 243.207 256.5 229.375 256.5C215.544 256.5 203.899 247.14 200.429 234.408C199.267 230.146 202.957 226.5 207.375 226.5H251.375Z";
+const P_FRAME_FILL="M226.295 176.855C226.295 209.387 211.935 225.871 183.545 225.871C146.086 225.871 132.718 202.442 132.718 180.475C132.718 174.992 131.117 174.261 128.959 173.373C125.903 172.103 125.668 163.855 125.966 159.801C126 159.346 126.359 158.982 126.809 158.915C167.26 152.879 187.422 152.422 213.63 157.436C218.892 158.443 224.046 161.03 229.404 161.03H238.618C243.975 161.03 249.13 158.443 254.392 157.436C280.599 152.422 300.762 152.879 341.212 158.915C341.663 158.982 342.022 159.346 342.055 159.801C342.354 163.855 342.118 172.103 339.063 173.373C336.904 174.261 335.303 174.992 335.303 180.475C335.303 202.442 321.935 225.871 284.476 225.871C256.087 225.871 241.726 209.387 241.726 176.855C241.896 175.293 240.681 173.908 239.11 173.908H228.911C227.34 173.908 226.126 175.293 226.295 176.855Z";
+const P_LENS_MASK="M183.545 225.871C211.935 225.871 226.295 209.387 226.295 176.855C225.219 166.933 223.655 159.355 213.629 157.436C187.422 152.422 167.259 152.879 126.809 158.915C126.358 158.982 125.999 159.346 125.966 159.801C125.667 163.855 125.903 172.103 128.958 173.373C131.117 174.261 132.718 174.992 132.718 180.475C132.718 202.442 146.086 225.871 183.545 225.871ZM284.476 225.871C256.086 225.871 241.726 209.387 241.726 176.855C242.802 166.933 244.366 159.355 254.392 157.436C280.599 152.422 300.762 152.879 341.212 158.915C341.662 158.982 342.022 159.346 342.055 159.801C342.354 163.855 342.118 172.103 339.063 173.373C336.904 174.261 335.303 174.992 335.303 180.475C335.303 202.442 321.935 225.871 284.476 225.871Z";
+const P_GLARE="M180.311 154.423L163.33 152.938L145 225.291L159.415 236.902L180.311 154.423ZM194.547 154.041L188.716 153.531L167.038 239.002L172.38 241.441L194.547 154.041Z";
+
+const P_FB="M128.959 173.373L128.191 175.22L128.198 175.223L128.959 173.373ZM125.966 159.801L127.961 159.947V159.947L125.966 159.801ZM126.809 158.915L127.104 160.893H127.104L126.809 158.915ZM341.212 158.915L341.507 156.936L341.507 156.936L341.212 158.915ZM342.055 159.801L344.05 159.654V159.654L342.055 159.801ZM339.063 173.373L339.824 175.223L339.831 175.22L339.063 173.373ZM183.545 227.871C198.132 227.871 209.448 223.623 217.074 214.877C224.655 206.182 228.295 193.373 228.295 176.855H224.295C224.295 192.869 220.755 204.568 214.059 212.248C207.407 219.877 197.348 223.871 183.545 223.871V227.871ZM130.718 180.475C130.718 191.843 134.177 203.721 142.622 212.775C151.098 221.862 164.379 227.871 183.545 227.871V223.871C165.253 223.871 153.12 218.166 145.547 210.047C137.943 201.894 134.718 191.074 134.718 180.475H130.718ZM128.198 175.223C129.319 175.684 129.706 175.905 129.997 176.331C130.321 176.804 130.718 177.857 130.718 180.475H134.718C134.718 177.611 134.315 175.557 133.298 174.071C132.25 172.539 130.756 171.95 129.719 171.524L128.198 175.223ZM123.972 159.654C123.815 161.781 123.795 165.011 124.226 167.924C124.441 169.375 124.781 170.848 125.33 172.093C125.858 173.293 126.726 174.611 128.191 175.22L129.726 171.527C129.663 171.5 129.356 171.311 128.99 170.481C128.645 169.696 128.372 168.615 128.183 167.339C127.807 164.796 127.819 161.875 127.961 159.947L123.972 159.654ZM126.514 156.936C125.199 157.133 124.078 158.207 123.972 159.654L127.961 159.947C127.921 160.485 127.519 160.831 127.104 160.893L126.514 156.936ZM214.005 155.472C187.486 150.398 167.072 150.885 126.514 156.936L127.104 160.893C167.447 154.873 187.358 154.446 213.254 159.401L214.005 155.472ZM229.404 163.03H238.618V159.03H229.404V163.03ZM254.768 159.401C280.663 154.446 300.575 154.873 340.917 160.893L341.507 156.936C300.949 150.885 280.536 150.398 254.016 155.472L254.768 159.401ZM340.917 160.893C340.503 160.831 340.1 160.485 340.061 159.947L344.05 159.654C343.943 158.207 342.823 157.133 341.507 156.936L340.917 160.893ZM340.061 159.947C340.203 161.875 340.214 164.796 339.838 167.339C339.65 168.615 339.377 169.696 339.031 170.481C338.666 171.311 338.358 171.5 338.295 171.527L339.831 175.22C341.295 174.611 342.163 173.293 342.692 172.093C343.24 170.848 343.581 169.375 343.795 167.924C344.226 165.011 344.206 161.781 344.05 159.654L340.061 159.947ZM338.302 171.524C337.265 171.95 335.772 172.539 334.723 174.071C333.707 175.557 333.303 177.611 333.303 180.475H337.303C337.303 177.857 337.7 176.804 338.024 176.331C338.316 175.905 338.702 175.684 339.824 175.223L338.302 171.524ZM333.303 180.475C333.303 191.074 330.078 201.894 322.474 210.047C314.901 218.166 302.769 223.871 284.476 223.871V227.871C303.643 227.871 316.923 221.862 325.399 212.775C333.844 203.721 337.303 191.843 337.303 180.475H333.303ZM284.476 223.871C270.673 223.871 260.614 219.877 253.963 212.248C247.266 204.568 243.726 192.869 243.726 176.855H239.726C239.726 193.373 243.367 206.182 250.948 214.877C258.574 223.623 269.89 227.871 284.476 227.871V223.871ZM239.11 171.908H228.911V175.908H239.11V171.908ZM243.715 177.07C244.009 174.354 241.9 171.908 239.11 171.908V175.908C239.463 175.908 239.782 176.231 239.738 176.639L243.715 177.07ZM238.618 163.03C241.599 163.03 244.458 162.311 247.107 161.529C249.842 160.721 252.265 159.88 254.768 159.401L254.016 155.472C251.256 156 248.471 156.955 245.974 157.693C243.391 158.456 240.994 159.03 238.618 159.03V163.03ZM228.911 171.908C226.122 171.908 224.012 174.354 224.307 177.07L228.283 176.639C228.239 176.231 228.559 175.908 228.911 175.908V171.908ZM213.254 159.401C215.756 159.88 218.179 160.721 220.914 161.529C223.564 162.311 226.422 163.03 229.404 163.03V159.03C227.028 159.03 224.63 158.456 222.047 157.693C219.55 156.955 216.765 156 214.005 155.472L213.254 159.401Z";
+const P_FT="M128.958 173.373L127.423 177.067L127.43 177.07L127.437 177.073L128.958 173.373ZM125.966 159.801L129.955 160.094V160.094L125.966 159.801ZM126.809 158.915L127.399 162.871H127.399L126.809 158.915ZM341.212 158.915L341.802 154.958L341.802 154.958L341.212 158.915ZM342.055 159.801L346.044 159.507V159.507L342.055 159.801ZM339.063 173.373L340.584 177.073L340.591 177.07L340.598 177.067L339.063 173.373ZM183.545 229.871C198.524 229.871 210.468 225.496 218.581 216.191C226.604 206.989 230.295 193.625 230.295 176.855H222.295C222.295 192.617 218.805 203.761 212.551 210.934C206.386 218.004 196.956 221.871 183.545 221.871V229.871ZM128.718 180.475C128.718 192.227 132.294 204.634 141.159 214.139C150.087 223.71 163.941 229.871 183.545 229.871V221.871C165.69 221.871 154.131 216.317 147.01 208.682C139.826 200.981 136.718 190.69 136.718 180.475H128.718ZM127.437 177.073C128.6 177.551 128.434 177.587 128.347 177.46C128.324 177.427 128.718 177.98 128.718 180.475H136.718C136.718 177.487 136.312 174.933 134.948 172.942C133.521 170.857 131.475 170.083 130.48 169.674L127.437 177.073ZM121.977 159.507C121.813 161.734 121.789 165.118 122.247 168.217C122.475 169.754 122.849 171.424 123.499 172.899C124.109 174.284 125.258 176.167 127.423 177.067L130.494 169.68C131.131 169.945 131.105 170.32 130.82 169.675C130.576 169.12 130.337 168.236 130.161 167.046C129.813 164.689 129.821 161.922 129.955 160.094L121.977 159.507ZM126.219 154.958C124.039 155.284 122.156 157.068 121.977 159.507L129.955 160.094C129.843 161.624 128.678 162.68 127.399 162.871L126.219 154.958ZM214.381 153.508C187.549 148.374 166.885 148.891 126.219 154.958L127.399 162.871C167.634 156.868 187.294 156.47 212.878 161.365L214.381 153.508ZM229.404 165.03H238.617V157.03H229.404V165.03ZM255.143 161.365C280.727 156.47 300.387 156.868 340.622 162.871L341.802 154.958C301.136 148.891 280.472 148.374 253.64 153.508L255.143 161.365ZM340.622 162.871C339.343 162.68 338.178 161.624 338.066 160.094L346.044 159.507C345.865 157.068 343.982 155.284 341.802 154.958L340.622 162.871ZM338.066 160.094C338.2 161.922 338.208 164.689 337.86 167.046C337.684 168.236 337.445 169.12 337.201 169.675C336.916 170.32 336.89 169.945 337.527 169.68L340.598 177.067C342.763 176.167 343.912 174.284 344.522 172.899C345.172 171.424 345.546 169.754 345.774 168.217C346.232 165.118 346.208 161.734 346.044 159.507L338.066 160.094ZM337.541 169.674C336.546 170.083 334.5 170.857 333.072 172.942C331.709 174.933 331.303 177.487 331.303 180.475H339.303C339.303 177.98 339.697 177.427 339.674 177.46C339.587 177.587 339.421 177.551 340.584 177.073L337.541 169.674ZM331.303 180.475C331.303 190.69 328.195 200.981 321.011 208.682C313.89 216.317 302.331 221.871 284.476 221.871V229.871C304.08 229.871 317.934 223.71 326.862 214.139C335.727 204.634 339.303 192.227 339.303 180.475H331.303ZM284.476 221.871C271.065 221.871 261.635 218.004 255.47 210.934C249.216 203.761 245.726 192.617 245.726 176.855H237.726C237.726 193.625 241.417 206.989 249.44 216.191C257.553 225.496 269.497 229.871 284.476 229.871V221.871ZM239.11 169.908H228.911V177.908H239.11V169.908ZM245.703 177.286C246.122 173.415 243.118 169.908 239.11 169.908V177.908C238.244 177.908 237.668 177.17 237.749 176.423L245.703 177.286ZM238.617 165.03C241.902 165.03 244.991 164.239 247.673 163.447C250.527 162.604 252.769 161.819 255.143 161.365L253.64 153.508C250.752 154.06 247.786 155.072 245.407 155.775C242.858 156.528 240.691 157.03 238.617 157.03V165.03ZM228.911 169.908C224.903 169.908 221.898 173.415 222.318 177.286L230.272 176.423C230.352 177.17 229.777 177.908 228.911 177.908V169.908ZM212.878 161.365C215.251 161.819 217.494 162.604 220.348 163.447C223.03 164.239 226.119 165.03 229.404 165.03V157.03C227.33 157.03 225.163 156.528 222.614 155.775C220.235 155.072 217.269 154.06 214.381 153.508L212.878 161.365Z";
+/* face anchors in the 347x340 space */
+const EYE_L=[183,190], EYE_R=[287,190], MOUTH=[229,241];
+
+function defs(id,shadow){
+  return `<defs>
+${shadow?`<filter id="fi${id}" x="17.9989" y="2.50418" width="324.003" height="332.496" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dx="17" dy="-12"/><feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/><feBlend mode="normal" in2="shape" result="effect1_innerShadow"/></filter>
+<filter id="fe${id}" x="15" y="166" width="80" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dx="12" dy="-16"/><feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/><feBlend mode="normal" in2="shape" result="effect1_innerShadow"/></filter>
+<filter id="fk${id}" x="7" y="178" width="56" height="56" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dx="12" dy="-8"/><feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/><feBlend mode="normal" in2="shape" result="effect1_innerShadow"/></filter>`:""}
+<filter id="fd${id}" x="13" y="150" width="333.152" height="83.871" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dx="-4" dy="4"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/></filter>
+<mask id="m${id}" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="125" y="154" width="218" height="72"><path fill-rule="evenodd" clip-rule="evenodd" d="${P_LENS_MASK}" fill="#C4C4C4"/></mask>
+</defs>`;
+}
+function flame(p,id,shadow){
+  return `<g id="Flame"><g${shadow?` filter="url(#fi${id})"`:""}><path d="${P_OUT}" fill="${p.base}"/></g><path d="${P_OUT}" stroke="${INK}" stroke-width="8" stroke-linejoin="round" fill="none"/></g>
+<path id="Flame_2" d="${P_MID}" fill="${p.mid}"/>
+<path id="Flame_3" d="${P_LIGHT}" fill="${p.light}"/>`;
+}
+function ear(p,id,shadow){
+  return `<g id="Ear"><circle cx="56" cy="217" r="36" fill="${INK}" fill-opacity="0.16"/>
+<g${shadow?` filter="url(#fe${id})"`:""}><circle cx="55" cy="206" r="36" fill="${p.ear}"/></g><circle cx="55" cy="206" r="36" stroke="${INK}" stroke-width="8" fill="none"/>
+<path d="M65 182C68.6403 183.938 71.7524 187.074 74 191" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<g${shadow?` filter="url(#fk${id})"`:""}><circle cx="35" cy="206" r="24" fill="${p.light}"/></g><circle cx="35" cy="206" r="24" stroke="${INK}" stroke-width="8" fill="none"/></g>`;
+}
+function shades(id){
+  return `<g id="Eyes" filter="url(#fd${id})">
+<rect x="21" y="160" width="114" height="7" rx="3.5" fill="${INK}" stroke="${INK}" stroke-width="8"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="${P_FRAME_FILL}" fill="${INK}"/><path d="${P_FB}" fill="${INK}"/>
+<g mask="url(#m${id})"><path fill-rule="evenodd" clip-rule="evenodd" d="${P_GLARE}" fill="white"/></g>
+<path d="${P_FT}" fill="${INK}"/></g>`;
+}
+function heart(x,y,s,fill){
+  return `<path transform="translate(${x} ${y}) scale(${s})" d="M0 9 C-3 6 -14 0 -14 -7 C-14 -12 -10 -15 -6 -15 C-3 -15 -1 -13 0 -11 C1 -13 3 -15 6 -15 C10 -15 14 -12 14 -7 C14 0 3 6 0 9 Z" fill="${fill}" stroke="${INK}" stroke-width="${8/s/1.6}" stroke-linejoin="round"/>`;
+}
+function star5(cx,cy,R,fill){let p=[];for(let i=0;i<10;i++){const r=i%2?R*.45:R;const a=-90+i*36;p.push((cx+r*Math.cos(a*Math.PI/180)).toFixed(1)+" "+(cy+r*Math.sin(a*Math.PI/180)).toFixed(1));}
+  return `<path d="M${p.join(" L")} Z" fill="${fill}" stroke="${INK}" stroke-width="7" stroke-linejoin="round"/>`;}
+function eyes(e,id){
+  const [lx,ly]=EYE_L,[rx,ry]=EYE_R, k=INK;
+  const both=f=>f(lx,ly,-1)+f(rx,ry,1);
+  switch(e){
+    case "shades":return shades(id);
+    case "visor":return `<rect x="128" y="160" width="214" height="56" rx="28" fill="${k}" stroke="${k}" stroke-width="8"/><rect x="164" y="183" width="142" height="11" rx="5.5" fill="#FF3B4E"/><rect x="172" y="185" width="40" height="4" rx="2" fill="#fff" opacity=".85"/>`;
+    case "big":return both((x,y)=>`<ellipse cx="${x}" cy="${y}" rx="30" ry="36" fill="#fff" stroke="${k}" stroke-width="8"/><circle cx="${x+5}" cy="${y+7}" r="14" fill="${k}"/><circle cx="${x+10}" cy="${y}" r="5" fill="#fff"/>`);
+    case "hearts":return both((x,y)=>heart(x,y+4,2.3,"#FF3B4E")+`<circle cx="${x-13}" cy="${y-10}" r="4.5" fill="#fff"/>`);
+    case "happy":return both((x,y)=>`<path d="M${x-24} ${y+10} Q${x} ${y-22} ${x+24} ${y+10}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`);
+    case "wink":return `<ellipse cx="${lx}" cy="${ly}" rx="15" ry="20" fill="${k}"/><circle cx="${lx+5}" cy="${ly-7}" r="4.5" fill="#fff"/><path d="M${rx-24} ${ry+4} Q${rx} ${ry-18} ${rx+24} ${ry+4}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`;
+    case "crying":return both((x,y)=>`<rect x="${x-15}" y="${y+4}" width="30" height="72" rx="15" fill="#8FD3FF" stroke="${k}" stroke-width="7"/><path d="M${x-24} ${y-4} Q${x} ${y+16} ${x+24} ${y-4}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`);
+    case "angry":return both((x,y,d)=>`<ellipse cx="${x}" cy="${y+6}" rx="22" ry="16" fill="#fff" stroke="${k}" stroke-width="7"/><circle cx="${x}" cy="${y+8}" r="8" fill="#E0202F"/><path d="M${x+28*d} ${y-24} L${x-26*d} ${y-6}" stroke="${k}" stroke-width="11" stroke-linecap="round"/>`);
+    case "glasses":return `<path d="M${lx+32} ${ly} H${rx-32}" stroke="${k}" stroke-width="8"/><path d="M${lx-32} ${ly-6} L80 170" stroke="${k}" stroke-width="7" stroke-linecap="round"/>`+both((x,y)=>`<circle cx="${x}" cy="${y}" r="32" fill="#fff" fill-opacity=".55" stroke="${k}" stroke-width="9"/><circle cx="${x+3}" cy="${y+3}" r="10" fill="${k}"/>`);
+    case "dizzy":return both((x,y)=>`<path d="M${x-16} ${y-16} L${x+16} ${y+16} M${x+16} ${y-16} L${x-16} ${y+16}" stroke="${k}" stroke-width="10" stroke-linecap="round"/>`);
+    case "stars":return both((x,y)=>star5(x,y+2,30,"#FFD447"));
+  }
+  return "";
+}
+function mouth(m){
+  const [x,y]=MOUTH,k=INK;
+  switch(m){
+    case "hi":return `<path id="Mouth" d="${P_MOUTH}" fill="${k}"/>`;
+    case "smile":return `<path d="M${x-26} ${y-6} Q${x} ${y+22} ${x+26} ${y-6}" stroke="${k}" stroke-width="9" stroke-linecap="round" fill="none"/>`;
+    case "grin":return `<rect x="${x-38}" y="${y-14}" width="76" height="32" rx="10" fill="#fff" stroke="${k}" stroke-width="7"/>`+[-19,0,19].map(d=>`<path d="M${x+d} ${y-14} V${y+18}" stroke="${k}" stroke-width="5"/>`).join("")+`<path d="M${x-38} ${y+2} H${x+38}" stroke="${k}" stroke-width="5"/>`;
+    case "wow":return `<ellipse cx="${x}" cy="${y+6}" rx="20" ry="26" fill="${k}"/><ellipse cx="${x}" cy="${y+18}" rx="12" ry="9" fill="#FF6B7A"/>`;
+    case "tongue":return `<path d="${P_MOUTH}" fill="${k}"/><path d="M${x-14} ${y+5} Q${x} ${y-4} ${x+14} ${y+5} Q${x+14} ${y+15} ${x} ${y+15} Q${x-14} ${y+15} ${x-14} ${y+5} Z" fill="#FF6B7A"/>`;
+    case "flat":return `<path d="M${x-22} ${y+2} H${x+22}" stroke="${k}" stroke-width="9" stroke-linecap="round"/>`;
+  }
+  return "";
+}
+function topper(t){
+  const o=`stroke="${INK}" stroke-width="8" stroke-linejoin="round"`;
+  switch(t){
+    case "party":return `<g transform="rotate(14 200 10)"><path d="M168 14 L204 -66 L240 14 Z" fill="#5DB8FF" ${o}/><path d="M184 -20 L226 -12 M196 -46 L218 -42" stroke="#FFD447" stroke-width="9" stroke-linecap="round"/><circle cx="204" cy="-72" r="11" fill="#FFD447" ${o}/></g>`;
+    case "crown":return `<path d="M150 22 L156 -32 L180 -6 L198 -44 L216 -6 L240 -32 L246 22 Z" fill="#FFD447" ${o}/><circle cx="198" cy="8" r="7" fill="#FF3B4E" stroke="${INK}" stroke-width="5"/><path d="M166 0 L170 14" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`;
+    case "halo":return `<ellipse cx="196" cy="-22" rx="62" ry="15" fill="none" stroke="${INK}" stroke-width="16"/><ellipse cx="196" cy="-22" rx="62" ry="15" fill="none" stroke="#FFD447" stroke-width="8"/>`;
+    case "bow":return `<g transform="translate(196 6)"><path d="M0 0 L-40 -26 Q-50 0 -40 26 Z" fill="#FF5AA0" ${o}/><path d="M0 0 L40 -26 Q50 0 40 26 Z" fill="#FF5AA0" ${o}/><circle r="12" fill="#FF8FC4" ${o}/></g>`;
+    case "cap":return `<path d="M128 40 Q134 -14 196 -14 Q258 -14 262 40 Z" fill="#FF3B4E" ${o}/><path d="M250 36 Q300 30 318 46 Q300 54 250 50 Z" fill="#D42433" ${o}/><circle cx="196" cy="-14" r="7" fill="#D42433" stroke="${INK}" stroke-width="5"/>`;
+  }
+  return "";
+}
+function extras(x){
+  let s="";
+  if(x.blush) s+=`<ellipse cx="150" cy="238" rx="20" ry="11" fill="#FF7E9D" opacity=".55"/><ellipse cx="310" cy="238" rx="20" ry="11" fill="#FF7E9D" opacity=".55"/>`;
+  if(x.bandage) s+=`<g transform="rotate(-30 252 126)"><rect x="216" y="112" width="72" height="28" rx="11" fill="#F7D9A8" stroke="${INK}" stroke-width="6"/><rect x="241" y="112" width="22" height="28" fill="#E9BC7A" stroke="${INK}" stroke-width="5"/></g>`;
+  if(x.sweat) s+=`<path d="M318 92 C330 112 336 124 326 134 C316 142 302 134 305 120 C307 110 312 102 318 92 Z" fill="#8FD3FF" stroke="${INK}" stroke-width="6"/>`;
+  if(x.hearts) s+=heart(300,38,1.9,"#FF3B4E")+heart(334,86,1.3,"#FF7E9D");
+  if(x.sparkles){const st=(cx,cy,r,c)=>`<path d="M${cx} ${cy-r} Q${cx} ${cy} ${cx+r} ${cy} Q${cx} ${cy} ${cx} ${cy+r} Q${cx} ${cy} ${cx-r} ${cy} Q${cx} ${cy} ${cx} ${cy-r} Z" fill="${c}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`;
+    s+=st(30,52,20,"#FFD447")+st(324,300,16,"#FF8FE8")+st(330,40,13,"#5DB8FF");}
+  return s;
+}
+/* full character. Viewbox padded so hats and sparkles fit */
+function draw(c,withBg){
+  const p=PAL[c.color], x=c.extras||{}, id=++uid, sh=x.shadow!==false;
+  const vb="-20 -90 387 440";
+  const bg=(withBg&&BG[c.bg])?`<rect x="-20" y="-90" width="387" height="440" fill="${BG[c.bg]}"/>`:"";
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh)}${bg}<g id="cold-flame">${flame(p,id,sh)}${mouth(c.mouth)}${eyes(c.eyes,id)}${x.ear!==false?ear(p,id,sh):""}${topper(c.top)}${extras(x)}</g></svg>`;
+}
+
+/* ---------- UI (Figma-like) ---------- */
+const $=id=>document.getElementById(id);
+const thumb=c=>draw(c,false);
+function optGrid(id,map,key){
+  const el=$(id);el.innerHTML="";
+  Object.entries(map).forEach(([k,n])=>{const b=document.createElement("button");b.type="button";b.className="opt";b.id=id+"-"+k;b.title=n;b.setAttribute("aria-label",n);
+    b.setAttribute("aria-pressed",S[key]===k);b.innerHTML=thumb({...S,[key]:k});b.onclick=()=>{S[key]=k;render();};el.appendChild(b);});
+}
+function swatches(id,map,key,label){
+  const el=$(id);el.innerHTML="";
+  Object.entries(map).forEach(([k,c])=>{const b=document.createElement("button");b.type="button";b.className="sw"+(c?"":" none");b.id=id+"-"+k;
+    if(c)b.style.background=c;b.title=label(k);b.setAttribute("aria-label",label(k));b.setAttribute("aria-pressed",S[key]===k);
+    b.onclick=()=>{S[key]=k;render();};el.appendChild(b);});
+}
+function render(){
+  $("tile").innerHTML=draw(S,false);
+  $("tile").style.background=BG[S.bg]||"";$("tile").classList.toggle("transparent",!BG[S.bg]);
+  swatches("o-color",Object.fromEntries(Object.entries(PAL).map(([k,v])=>[k,v.base])),"color",k=>PAL[k].n);
+  swatches("o-bg",BG,"bg",k=>k==="none"?"Transparent":k[0].toUpperCase()+k.slice(1));
+  optGrid("o-eyes",EYES,"eyes");optGrid("o-mouth",MOUTHS,"mouth");optGrid("o-top",TOPS,"top");
+  $("c-color").textContent=PAL[S.color].n;$("c-eyes").textContent=EYES[S.eyes];$("c-mouth").textContent=MOUTHS[S.mouth];
+  $("c-top").textContent=TOPS[S.top];$("c-bg").textContent=S.bg==="none"?"Transparent":S.bg[0].toUpperCase()+S.bg.slice(1);
+  const ex=$("o-extras");ex.innerHTML="";
+  Object.entries(EXTRAS).forEach(([k,n])=>{const on=(k==="ear"||k==="shadow")?S.extras[k]!==false:!!S.extras[k];
+    const b=document.createElement("button");b.type="button";b.className="tg";b.id="x-"+k;b.setAttribute("aria-pressed",on);
+    b.innerHTML=`<span>${n}</span><span class="sw-i" aria-hidden="true"></span>`;b.onclick=()=>{S.extras[k]=!on;render();};ex.appendChild(b);});
+  const pl=$("presets");pl.innerHTML="";
+  PRESETS.forEach((p,i)=>{const b=document.createElement("button");b.type="button";b.className="li";b.id="p-"+i;
+    b.setAttribute("aria-pressed",JSON.stringify(p.c)===JSON.stringify(S));
+    b.innerHTML=`<span class="th" style="background:${BG[p.c.bg]||"transparent"}">${thumb(p.c)}</span><span>${p.n}</span>`;
+    b.onclick=()=>{S=JSON.parse(JSON.stringify(p.c));render();};pl.appendChild(b);});
+}
+function pick(o){const k=Object.keys(o);return k[Math.floor(Math.random()*k.length)];}
+$("random").onclick=()=>{let bg=pick(BG);if(bg==="none")bg="pink";
+  S={color:Math.random()>.5?"blue":pick(PAL),eyes:pick(EYES),mouth:pick(MOUTHS),top:Math.random()>.5?"none":pick(TOPS),bg,
+     extras:{ear:true,shadow:true,blush:Math.random()>.7,sparkles:Math.random()>.75,hearts:Math.random()>.85,sweat:Math.random()>.85}};render();};
+function say(t){$("status").textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>$("status").textContent="",2600);}
+function exportSvg(){return draw(S,BG[S.bg]!=="");}
+$("copySvg").onclick=async()=>{const svg=exportSvg();
+  try{await navigator.clipboard.writeText(svg);$("fbsec").hidden=true;say("SVG copied — paste into Figma");}
+  catch(e){$("fbsec").hidden=false;const f=$("fallback");f.value=svg;f.focus();f.select();say("Copy blocked here. Code selected in the panel; press Cmd+C");}};
+$("copyPng").onclick=async()=>{
+  try{const svg=exportSvg().replace('width="387" height="440"','width="1161" height="1320"');
+    const img=new Image();await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);});
+    const cv=document.createElement("canvas");cv.width=1161;cv.height=1320;cv.getContext("2d").drawImage(img,0,0);
+    const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+    await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);say("PNG copied");
+  }catch(e){say("This viewer blocks image copy — use Copy SVG");}};
+const KEY="blu-studio-saved";
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||"[]");}catch(e){return [];}}
+function store(a){try{localStorage.setItem(KEY,JSON.stringify(a));return true;}catch(e){return false;}}
+function renderSaved(){const el=$("saved");el.innerHTML="";const a=load();
+  if(!a.length){el.innerHTML=`<span class="empty" style="grid-column:1/-1">Press Save to keep versions here.</span>`;return;}
+  a.forEach((c,i)=>{const b=document.createElement("div");b.className="sv";b.style.background=BG[c.bg]||"var(--panel)";b.innerHTML=thumb(c);
+    b.tabIndex=0;b.setAttribute("role","button");b.setAttribute("aria-label","Load saved version "+(i+1));
+    b.onclick=()=>{S=JSON.parse(JSON.stringify(c));render();};b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();b.onclick();}};
+    const x=document.createElement("button");x.type="button";x.className="x";x.textContent="×";x.setAttribute("aria-label","Remove");
+    x.onclick=e=>{e.stopPropagation();const z=load();z.splice(i,1);store(z);renderSaved();};b.appendChild(x);el.appendChild(b);});}
+$("save").onclick=()=>{const a=load();a.unshift(JSON.parse(JSON.stringify(S)));if(store(a.slice(0,40))){renderSaved();say("Saved");}else say("This browser blocks saving here");};
+
+/* ---------- Place in Figma (viewer's Figma connector) ---------- */
+const FIGMA="Figma";
+const LINKKEY="blu-studio-figlink";
+try{const l=localStorage.getItem(LINKKEY);if(l)$("figlink").value=l;}catch(e){}
+function parseFig(url){
+  const m=String(url).match(/figma\.com\/(?:design|file)\/([A-Za-z0-9]{22,128})(?:\/branch\/([A-Za-z0-9]{22,128}))?/);
+  if(!m) return null;
+  const n=String(url).match(/[?&]node-id=([0-9]+)[-:]([0-9]+)/);
+  return {fileKey:m[2]||m[1],nodeId:n?n[1]+":"+n[2]:null};
+}
+function figMsg(html){$("figmsg").innerHTML=html;}
+let mcpP=null;
+function getMcp(){if(!mcpP)mcpP=(window.claude&&window.claude.use)?window.claude.use("mcp"):Promise.resolve(null);return mcpP;}
+getMcp().then(m=>{$("figstate").textContent=m?"connector":"unavailable here";if(!m){$("figplace").disabled=true;figMsg('<span class="muted">Placing needs the Figma connector, which this view can\'t reach. Use Copy SVG and paste into Figma instead.</span>');}});
+function nameFor(c){return "Blu / "+PAL[c.color].n+" / "+EYES[c.eyes]+(c.top!=="none"?" / "+TOPS[c.top]:"");}
+$("figplace").onclick=async()=>{
+  const link=$("figlink").value.trim();const t=parseFig(link);
+  if(!t){figMsg("Paste a link that starts with figma.com/design/…");$("figlink").focus();return;}
+  try{localStorage.setItem(LINKKEY,link);}catch(e){}
+  const mcp=await getMcp();
+  if(!mcp){figMsg("This view can't reach the Figma connector. Use Copy SVG instead.");return;}
+  const svg=exportSvg();
+  const code=`const svg=${JSON.stringify(svg)};
+const nodeId=${JSON.stringify(t.nodeId)};
+let anchor=null;
+if(nodeId){anchor=await figma.getNodeByIdAsync(nodeId);}
+let page=figma.root.children[0];
+if(anchor){let p=anchor;while(p&&p.type!=="PAGE")p=p.parent;if(anchor.type==="PAGE")p=anchor;if(p)page=p;}
+await figma.setCurrentPageAsync(page);
+const n=figma.createNodeFromSvg(svg);
+n.name=${JSON.stringify(nameFor(S))};
+const inside=anchor&&(anchor.type==="FRAME"||anchor.type==="SECTION")&&anchor.layoutMode!=="HORIZONTAL"&&anchor.layoutMode!=="VERTICAL";
+if(inside){anchor.appendChild(n);n.x=24;n.y=24;}
+else if(anchor&&anchor.type!=="PAGE"&&"absoluteBoundingBox" in anchor&&anchor.absoluteBoundingBox){const b=anchor.absoluteBoundingBox;n.x=b.x+b.width+80;n.y=b.y;}
+else{const kids=page.children.filter(c=>c!==n);const r=kids.length?Math.max(...kids.map(c=>c.x+c.width)):0;const top=kids.length?Math.min(...kids.map(c=>c.y)):0;n.x=r+120;n.y=top;}
+return {id:n.id,page:page.name,inside:!!inside};`;
+  $("figplace").disabled=true;figMsg("Placing…");
+  try{
+    const res=await mcp.callTool(FIGMA,"use_figma",{fileKey:t.fileKey,code,description:"Place Blu from Blu Studio"});
+    const p=res.payload||{};let out=p;
+    if(typeof p==="string"){try{out=JSON.parse(p);}catch(e){out={};}}
+    const id=(out&&out.id)||(out&&out.result&&out.result.id);
+    const url="https://www.figma.com/design/"+t.fileKey+"/"+(id?"?node-id="+String(id).replace(":","-"):"");
+    figMsg(`Placed${out&&out.page?" on “"+out.page+"”":""}. <a href="${url}" target="_blank" rel="noopener">Open in Figma</a>`);
+  }catch(e){
+    const c=e&&e.code;
+    if(c==="server_not_connected"||c==="server_not_found") figMsg("Add the Figma connector in claude.ai Settings → Connectors, then try again.");
+    else if(c==="needs_reauth") figMsg("Reconnect Figma in claude.ai Settings → Connectors, then try again.");
+    else if(c==="approval_required"||c==="not_in_manifest"||c==="consent_required") figMsg("This page needs your permission to use Figma. Press Place in Figma again and choose Allow.");
+    else if(c==="selection_required") figMsg("You have more than one Figma connector. Pick one in the prompt, then try again.");
+    else if(c==="blocked_by_policy") figMsg("Your organization blocks this Figma action. Use Copy SVG instead.");
+    else if(c==="tool_error") figMsg("Figma refused: "+String(e.message||"").slice(0,160)+" Check that you can edit this file.");
+    else if(c==="not_granted"||c==="capability_disabled"||c==="capability_removed") figMsg("This view can't reach the Figma connector. Use Copy SVG instead.");
+    else figMsg("Figma didn't confirm. Check the file before trying again, it may already be there.");
+  }finally{$("figplace").disabled=false;}
+};
+$("brand").insertAdjacentHTML("afterbegin",draw(BRAND,false));
+render();renderSaved();
+})();
+
+</script>
+
+</body>
+</html>
