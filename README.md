@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/blu-hello.svg" width="720" alt="Blu, a blue flame with sunglasses, floating, peeking over his shades and blinking">
+  <img src="assets/blu-hello.svg" width="200" alt="Blu, a blue flame with sunglasses, floating, peeking over his shades and blinking">
 </p>
 
 <h1 align="center">Blu Studio</h1>
