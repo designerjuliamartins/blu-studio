@@ -34,7 +34,8 @@ Blu Studio is the shortcut. You pick the mood, and he's ready.
 | **Colour** | Brand blue plus seven more. Each recolours his three flame tones and his ear together, so he always looks like himself. |
 | **Eyes** | His original shades, or googly, hearts, happy, laughing, wink, shocked and angry. |
 | **Mouth** | His original smirk, or smile, sweet, laugh, kiss, scream, gritted, or none. |
-| **On top** | Cap, beanie, party hat, crown, hair bow or halo. Hats sit on his head, with a flame tip or two poking out. |
+| **On top** | Beret, grad cap, antenna, cap, beanie, party hat, crown, hair bow or halo. Hats sit on his head, with a flame tip or two poking out. |
+| **Prop** | Megaphone, growth chart, pencil or idea bulb, for dressing him up as the subject he's teaching. |
 | **Extras** | Ear knob, inner shadow, blush, floating hearts, sparkles, Zzz, sweat drop. |
 | **Background** | A coloured tile, or transparent. |
 
