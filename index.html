@@ -127,11 +127,11 @@ textarea{width:100%;height:90px;border-radius:6px;border:1px solid var(--line);b
     </main>
 
     <aside class="side right" aria-label="Properties">
+      <div class="sec"><div class="sec-h">Body <small class="cur" id="c-body"></small></div><div class="grid" id="o-body"></div></div>
       <div class="sec"><div class="sec-h">Colour <small class="cur" id="c-color"></small></div><div class="sw-row" id="o-color"></div></div>
       <div class="sec"><div class="sec-h">Eyes <small class="cur" id="c-eyes"></small></div><div class="grid" id="o-eyes"></div></div>
       <div class="sec"><div class="sec-h">Mouth <small class="cur" id="c-mouth"></small></div><div class="grid" id="o-mouth"></div></div>
       <div class="sec"><div class="sec-h">On top <small class="cur" id="c-top"></small></div><div class="grid" id="o-top"></div></div>
-      <div class="sec"><div class="sec-h">Prop <small class="cur" id="c-prop"></small></div><div class="grid" id="o-prop"></div></div>
       <div class="sec"><div class="sec-h">Extras</div><div class="toggles" id="o-extras"></div></div>
       <div class="sec"><div class="sec-h">Background <small class="cur" id="c-bg"></small></div><div class="sw-row" id="o-bg"></div></div>
       <div class="sec" id="figsec">
@@ -165,10 +165,10 @@ const PAL={
 const BG={none:"",pink:"#F6D8D6",sky:"#9ECFF2",mint:"#93E3BE",butter:"#F8E07A",orchid:"#FF8FE8",hotpink:"#FF5AA0",tangerine:"#E9832B",cherry:"#FF2350",cobalt:"#1756C8",lime:"#86E07E",fog:"#B4B4B4"};
 const EYES={shades:"Shades",googly:"Googly",hearts:"Hearts",lovely:"Happy",laughing:"Laughing",wink:"Wink",scream:"Shocked",angry:"Angry"};
 const MOUTHS={hi:"Original",happy:"Smile",sweet:"Sweet",laugh:"Laugh",kiss:"Kiss",scream:"Scream",gritted:"Gritted",none:"None"};
-const TOPS={none:"None",beret:"Beret",gradcap:"Grad cap",antenna:"Antenna",cap:"Cap",beanie:"Beanie",party:"Party hat",crown:"Crown",bow:"Hair bow",halo:"Halo"};
+const TOPS={none:"None",gradcap:"Grad cap",cap:"Cap",beanie:"Beanie",party:"Party hat",crown:"Crown",bow:"Hair bow",halo:"Halo"};
 const EXTRAS={ear:"Ear knob",blush:"Blush",hearts:"Floating hearts",sparkles:"Sparkles",zzz:"Zzz",sweat:"Sweat drop",shadow:"Inner shadow"};
 
-const BRAND={color:"blue",eyes:"shades",mouth:"hi",top:"none",prop:"none",bg:"pink",extras:{ear:true,shadow:true}};
+const BRAND={body:"flame",color:"blue",eyes:"shades",mouth:"hi",top:"none",prop:"none",bg:"pink",extras:{ear:true,shadow:true}};
 const PRESETS=[
   {n:"Blu",c:BRAND},
   {n:"Crush",c:{color:"blue",eyes:"hearts",mouth:"happy",top:"none",bg:"hotpink",extras:{ear:true,shadow:true}}},
@@ -306,6 +306,38 @@ function propSvg(k){
   return "";
 }
 const PROP_BEHIND={};
+
+/* ---------- body shapes: Blu himself transforms (no props) ---------- */
+const BODIES={flame:"Classic",bot:"Robot",vector:"Being edited",bubble:"Chat bubble"};
+const SEG1=[[61.1851,43.6109],[-36.1921,198.103],[63.5888,331],[189.288,331]];
+const SEG2=[[189.288,331],[315.057,331],[388.935,216.612],[296.727,46.2577]];
+function bz(s,t){const u=1-t;return [0,1].map(k=>u*u*u*s[0][k]+3*u*u*t*s[1][k]+3*u*t*t*s[2][k]+t*t*t*s[3][k]);}
+function bottomAt(x){let best=null;for(const s of [SEG1,SEG2])for(let i=0;i<=400;i++){const p=bz(s,i/400);if(Math.abs(p[0]-x)<1.2&&p[1]>200&&(!best||p[1]>best))best=p[1];}return best||330;}
+const BOX_SIDE="M14 130C14 116.745 24.7452 106 38 106H230C243.255 106 254 116.745 254 130V290C254 303.255 243.255 314 230 314H38C24.7452 314 14 303.255 14 290V130Z";
+const BOX_FRONT="M114 130C114 116.745 124.745 106 138 106H314C327.255 106 338 116.745 338 130V290C338 303.255 327.255 314 314 314H138C124.745 314 114 303.255 114 290V130Z";
+function botBody(p,id,shadow){
+  return `<g id="Robot">
+<clipPath id="ct${id}"><rect x="-60" y="-100" width="460" height="214"/></clipPath><g clip-path="url(#ct${id})"><path d="${P_OUT}" fill="${p.base}"/><path d="${P_OUT}" stroke="${INK}" stroke-width="8" stroke-linejoin="round" fill="none"/></g>
+<path d="${BOX_SIDE}" fill="${shade(p.base,.12)}" stroke="${INK}" stroke-width="8"/>
+${shadow?`<clipPath id="cb${id}"><path d="${BOX_FRONT}"/></clipPath><g clip-path="url(#cb${id})"><path d="${BOX_FRONT}" fill="${shade(p.mid,.14)}"/><path d="${BOX_FRONT}" transform="translate(12 -12)" fill="${p.mid}"/></g>`:`<path d="${BOX_FRONT}" fill="${p.mid}"/>`}
+<path d="M242 110H280L224 310H186L242 110Z" fill="white" fill-opacity="0.5"/><path d="M227 110H233L177 310H171L227 110Z" fill="white" fill-opacity="0.5"/>
+<path d="${BOX_FRONT}" stroke="${INK}" stroke-width="8" fill="none"/></g>`;
+}
+function selection(){
+  const S="#0D99FF",x0=8,y0=-4,x1=352,y1=342;
+  const h=(x,y)=>`<rect x="${x-13}" y="${y-13}" width="26" height="26" rx="3" fill="#fff" stroke="${S}" stroke-width="6"/>`;
+  const a=(x,y)=>`<rect x="${x-8}" y="${y-8}" width="16" height="16" rx="2" fill="#fff" stroke="${S}" stroke-width="5"/>`;
+  return `<g id="Selection"><rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" stroke="${S}" stroke-width="6" fill="none"/>
+<path d="M160 -10 L228 24" stroke="${S}" stroke-width="5"/><circle cx="160" cy="-10" r="9" fill="${S}"/><circle cx="228" cy="24" r="9" fill="${S}"/>
+${a(61,44)}${a(130,15)}${a(194,7)}${a(296,46)}${a(189,331)}
+${h(x0,y0)}${h(x1,y0)}${h(x0,y1)}${h(x1,y1)}</g>`;
+}
+
+
+function bubbleTail(p){
+  const A=bz(SEG1,.6),B=bz(SEG1,.8),tip=[A[0]-36,B[1]+30];
+  return `<path d="M${A[0]+3} ${A[1]+6} L${tip[0]} ${tip[1]} L${B[0]+2} ${B[1]-8} Z" fill="${p.base}"/><path d="M${A[0]+1} ${A[1]+2} L${tip[0]} ${tip[1]} L${B[0]} ${B[1]-2}" stroke="${INK}" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>`;
+}
 function topper(t){
   const K=INK, o=`stroke="${K}" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"`;
   switch(t){
@@ -359,15 +391,17 @@ function extras(x){
 }
 /* full character. Viewbox padded so hats and sparkles fit */
 function draw(c,withBg){
-  const p=PAL[c.color], x=c.extras||{}, id=++uid, sh=x.shadow!==false;
+  const p=PAL[c.color], x=c.extras||{}, id=++uid, sh=x.shadow!==false, body=c.body||"flame";
   const vb="-20 -90 387 440";
   const bg=(withBg&&BG[c.bg])?`<rect x="-20" y="-90" width="387" height="440" fill="${BG[c.bg]}"/>`:"";
-  const under=ART.under[c.eyes]?`<g transform="${FACE}">${ART.under[c.eyes]}</g>`:"";
-  const face=mouth(c.mouth)+eyes(c.eyes,id);
+  const ft=body==="bot"?"translate(0 0)":FACE;
+  const face=(mouth(c.mouth)+eyes(c.eyes,id)).replaceAll(`transform="${FACE}"`,`transform="${ft}"`);
   const ex=extras(x);
-  const extra=artDefs(under+face+ex);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh).replace("</defs>",extra+"</defs>")}${bg}<g id="cold-flame">${under}${c.top==="antenna"?topper("antenna"):""}${PROP_BEHIND[c.prop]?propSvg(c.prop):""}${flame(p,id,sh)}${face}${x.ear!==false?ear(p,id,sh):""}${c.top!=="antenna"?topper(c.top):""}${c.prop&&!PROP_BEHIND[c.prop]?propSvg(c.prop):""}${ex}</g></svg>`;
+  const extra=artDefs(face+ex);
+  const torso=body==="bot"?botBody(p,id,sh):flame(p,id,sh)+(body==="bubble"?bubbleTail(p):"");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh).replace("</defs>",extra+"</defs>")}${bg}<g id="cold-flame">${c.top==="antenna"?topper("antenna"):""}${PROP_BEHIND[c.prop]?propSvg(c.prop):""}${torso}${face}${x.ear!==false?ear(p,id,sh):""}${c.top!=="antenna"?topper(c.top):""}${c.prop&&c.prop!=="none"&&!PROP_BEHIND[c.prop]?propSvg(c.prop):""}${ex}${body==="vector"?selection():""}</g></svg>`;
 }
+
 
 
 /* ---------- UI (Figma-like) ---------- */
@@ -389,9 +423,9 @@ function render(){
   $("tile").style.background=BG[S.bg]||"";$("tile").classList.toggle("transparent",!BG[S.bg]);
   swatches("o-color",Object.fromEntries(Object.entries(PAL).map(([k,v])=>[k,v.base])),"color",k=>PAL[k].n);
   swatches("o-bg",BG,"bg",k=>k==="none"?"Transparent":k[0].toUpperCase()+k.slice(1));
-  if(!S.prop)S.prop="none";optGrid("o-eyes",EYES,"eyes");optGrid("o-mouth",MOUTHS,"mouth");optGrid("o-top",TOPS,"top");optGrid("o-prop",PROPS,"prop");
+  if(!S.prop)S.prop="none";if(!S.body)S.body="flame";optGrid("o-body",BODIES,"body");optGrid("o-eyes",EYES,"eyes");optGrid("o-mouth",MOUTHS,"mouth");optGrid("o-top",TOPS,"top");
   $("c-color").textContent=PAL[S.color].n;$("c-eyes").textContent=EYES[S.eyes];$("c-mouth").textContent=MOUTHS[S.mouth];
-  $("c-top").textContent=TOPS[S.top];$("c-prop").textContent=PROPS[S.prop||"none"];$("c-bg").textContent=S.bg==="none"?"Transparent":S.bg[0].toUpperCase()+S.bg.slice(1);
+  $("c-top").textContent=TOPS[S.top];$("c-body").textContent=BODIES[S.body||"flame"];$("c-bg").textContent=S.bg==="none"?"Transparent":S.bg[0].toUpperCase()+S.bg.slice(1);
   const ex=$("o-extras");ex.innerHTML="";
   Object.entries(EXTRAS).forEach(([k,n])=>{const on=(k==="ear"||k==="shadow")?S.extras[k]!==false:!!S.extras[k];
     const b=document.createElement("button");b.type="button";b.className="tg";b.id="x-"+k;b.setAttribute("aria-pressed",on);
@@ -404,7 +438,7 @@ function render(){
 }
 function pick(o){const k=Object.keys(o);return k[Math.floor(Math.random()*k.length)];}
 $("random").onclick=()=>{let bg=pick(BG);if(bg==="none")bg="pink";
-  S={color:Math.random()>.5?"blue":pick(PAL),eyes:pick(EYES),mouth:pick(MOUTHS),top:Math.random()>.5?"none":pick(TOPS),prop:Math.random()>.6?pick(PROPS):"none",bg,
+  S={color:Math.random()>.5?"blue":pick(PAL),eyes:pick(EYES),mouth:pick(MOUTHS),top:Math.random()>.5?"none":pick(TOPS),prop:"none",body:Math.random()>.6?pick(BODIES):"flame",bg,
      extras:{ear:true,shadow:true,blush:Math.random()>.7,sparkles:Math.random()>.75,hearts:Math.random()>.85,sweat:Math.random()>.85}};render();};
 function say(t){$("status").textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>$("status").textContent="",2600);}
 function exportSvg(){return draw(S,BG[S.bg]!=="");}
