@@ -162,19 +162,21 @@ const PAL={
   grey:{n:"Grey",base:"#9DA4AE",mid:"#D3D7DD",light:"#ECEEF1",ear:"#B6BCC4"}
 };
 const BG={none:"",pink:"#F6D8D6",sky:"#9ECFF2",mint:"#93E3BE",butter:"#F8E07A",orchid:"#FF8FE8",hotpink:"#FF5AA0",tangerine:"#E9832B",cherry:"#FF2350",cobalt:"#1756C8",lime:"#86E07E",fog:"#B4B4B4"};
-const EYES={shades:"Shades",visor:"Visor",big:"Big eyes",hearts:"Hearts",happy:"Happy",wink:"Wink",crying:"Crying",angry:"Angry",glasses:"Glasses",dizzy:"Dizzy",stars:"Star eyes"};
-const MOUTHS={hi:"Original",smile:"Smile",grin:"Grin",wow:"Wow",tongue:"Tongue",flat:"Flat",none:"None"};
-const TOPS={none:"None",party:"Party hat",crown:"Crown",halo:"Halo",bow:"Bow",cap:"Cap"};
-const EXTRAS={ear:"Ear knob",blush:"Blush",hearts:"Floating hearts",sweat:"Sweat drop",sparkles:"Sparkles",bandage:"Bandage",shadow:"Inner shadow"};
+const EYES={shades:"Shades",visor:"Visor",big:"Big eyes",hearts:"Hearts",happy:"Happy",laughing:"Laughing",wink:"Wink",sleepy:"Sleepy",crying:"Crying",angry:"Angry",glasses:"Glasses",dizzy:"Dizzy",stars:"Star eyes"};
+const MOUTHS={hi:"Original",smile:"Smile",grin:"Laugh",teeth:"Gritted",wow:"Wow",o:"Little o",tongue:"Tongue",flat:"Flat",none:"None"};
+const TOPS={none:"None",cap:"Cap",beanie:"Beanie",party:"Party hat",crown:"Crown",bow:"Hair bow",halo:"Halo"};
+const EXTRAS={ear:"Ear knob",blush:"Blush",hearts:"Floating hearts",sweat:"Sweat drop",sparkles:"Sparkles",zzz:"Zzz",bandage:"Bandage",shadow:"Inner shadow"};
 
 const BRAND={color:"blue",eyes:"shades",mouth:"hi",top:"none",bg:"pink",extras:{ear:true,shadow:true}};
 const PRESETS=[
   {n:"Blu",c:BRAND},
-  {n:"In love",c:{color:"blue",eyes:"hearts",mouth:"smile",top:"none",bg:"mint",extras:{ear:true,shadow:true,blush:true,hearts:true}}},
-  {n:"Party",c:{color:"blue",eyes:"happy",mouth:"tongue",top:"party",bg:"butter",extras:{ear:true,shadow:true,sparkles:true}}},
-  {n:"Champion",c:{color:"blue",eyes:"stars",mouth:"grin",top:"crown",bg:"cobalt",extras:{ear:true,shadow:true,sparkles:true}}},
-  {n:"Oops",c:{color:"blue",eyes:"crying",mouth:"wow",top:"none",bg:"sky",extras:{ear:true,shadow:true,sweat:true}}},
-  {n:"Angry red",c:{color:"red",eyes:"angry",mouth:"grin",top:"none",bg:"tangerine",extras:{ear:true,shadow:true,bandage:true}}}
+  {n:"Crush",c:{color:"blue",eyes:"hearts",mouth:"smile",top:"none",bg:"hotpink",extras:{ear:true,shadow:true,blush:true,hearts:true}}},
+  {n:"Party",c:{color:"blue",eyes:"laughing",mouth:"grin",top:"party",bg:"butter",extras:{ear:true,shadow:true,sparkles:true}}},
+  {n:"Proud",c:{color:"blue",eyes:"stars",mouth:"smile",top:"crown",bg:"cobalt",extras:{ear:true,shadow:true,sparkles:true}}},
+  {n:"Sleepy",c:{color:"purple",eyes:"sleepy",mouth:"o",top:"none",bg:"orchid",extras:{ear:true,shadow:true,zzz:true,blush:true}}},
+  {n:"Oops",c:{color:"blue",eyes:"crying",mouth:"wow",top:"none",bg:"sky",extras:{ear:true,shadow:true}}},
+  {n:"Cheeky",c:{color:"pink",eyes:"wink",mouth:"tongue",top:"cap",bg:"mint",extras:{ear:true,shadow:true,blush:true}}},
+  {n:"Grumpy",c:{color:"red",eyes:"angry",mouth:"teeth",top:"none",bg:"tangerine",extras:{ear:true,shadow:true,sweat:true}}}
 ];
 let S=JSON.parse(JSON.stringify(BRAND));
 let uid=0;
@@ -191,6 +193,7 @@ const P_GLARE="M180.311 154.423L163.33 152.938L145 225.291L159.415 236.902L180.3
 const P_FB="M128.959 173.373L128.191 175.22L128.198 175.223L128.959 173.373ZM125.966 159.801L127.961 159.947V159.947L125.966 159.801ZM126.809 158.915L127.104 160.893H127.104L126.809 158.915ZM341.212 158.915L341.507 156.936L341.507 156.936L341.212 158.915ZM342.055 159.801L344.05 159.654V159.654L342.055 159.801ZM339.063 173.373L339.824 175.223L339.831 175.22L339.063 173.373ZM183.545 227.871C198.132 227.871 209.448 223.623 217.074 214.877C224.655 206.182 228.295 193.373 228.295 176.855H224.295C224.295 192.869 220.755 204.568 214.059 212.248C207.407 219.877 197.348 223.871 183.545 223.871V227.871ZM130.718 180.475C130.718 191.843 134.177 203.721 142.622 212.775C151.098 221.862 164.379 227.871 183.545 227.871V223.871C165.253 223.871 153.12 218.166 145.547 210.047C137.943 201.894 134.718 191.074 134.718 180.475H130.718ZM128.198 175.223C129.319 175.684 129.706 175.905 129.997 176.331C130.321 176.804 130.718 177.857 130.718 180.475H134.718C134.718 177.611 134.315 175.557 133.298 174.071C132.25 172.539 130.756 171.95 129.719 171.524L128.198 175.223ZM123.972 159.654C123.815 161.781 123.795 165.011 124.226 167.924C124.441 169.375 124.781 170.848 125.33 172.093C125.858 173.293 126.726 174.611 128.191 175.22L129.726 171.527C129.663 171.5 129.356 171.311 128.99 170.481C128.645 169.696 128.372 168.615 128.183 167.339C127.807 164.796 127.819 161.875 127.961 159.947L123.972 159.654ZM126.514 156.936C125.199 157.133 124.078 158.207 123.972 159.654L127.961 159.947C127.921 160.485 127.519 160.831 127.104 160.893L126.514 156.936ZM214.005 155.472C187.486 150.398 167.072 150.885 126.514 156.936L127.104 160.893C167.447 154.873 187.358 154.446 213.254 159.401L214.005 155.472ZM229.404 163.03H238.618V159.03H229.404V163.03ZM254.768 159.401C280.663 154.446 300.575 154.873 340.917 160.893L341.507 156.936C300.949 150.885 280.536 150.398 254.016 155.472L254.768 159.401ZM340.917 160.893C340.503 160.831 340.1 160.485 340.061 159.947L344.05 159.654C343.943 158.207 342.823 157.133 341.507 156.936L340.917 160.893ZM340.061 159.947C340.203 161.875 340.214 164.796 339.838 167.339C339.65 168.615 339.377 169.696 339.031 170.481C338.666 171.311 338.358 171.5 338.295 171.527L339.831 175.22C341.295 174.611 342.163 173.293 342.692 172.093C343.24 170.848 343.581 169.375 343.795 167.924C344.226 165.011 344.206 161.781 344.05 159.654L340.061 159.947ZM338.302 171.524C337.265 171.95 335.772 172.539 334.723 174.071C333.707 175.557 333.303 177.611 333.303 180.475H337.303C337.303 177.857 337.7 176.804 338.024 176.331C338.316 175.905 338.702 175.684 339.824 175.223L338.302 171.524ZM333.303 180.475C333.303 191.074 330.078 201.894 322.474 210.047C314.901 218.166 302.769 223.871 284.476 223.871V227.871C303.643 227.871 316.923 221.862 325.399 212.775C333.844 203.721 337.303 191.843 337.303 180.475H333.303ZM284.476 223.871C270.673 223.871 260.614 219.877 253.963 212.248C247.266 204.568 243.726 192.869 243.726 176.855H239.726C239.726 193.373 243.367 206.182 250.948 214.877C258.574 223.623 269.89 227.871 284.476 227.871V223.871ZM239.11 171.908H228.911V175.908H239.11V171.908ZM243.715 177.07C244.009 174.354 241.9 171.908 239.11 171.908V175.908C239.463 175.908 239.782 176.231 239.738 176.639L243.715 177.07ZM238.618 163.03C241.599 163.03 244.458 162.311 247.107 161.529C249.842 160.721 252.265 159.88 254.768 159.401L254.016 155.472C251.256 156 248.471 156.955 245.974 157.693C243.391 158.456 240.994 159.03 238.618 159.03V163.03ZM228.911 171.908C226.122 171.908 224.012 174.354 224.307 177.07L228.283 176.639C228.239 176.231 228.559 175.908 228.911 175.908V171.908ZM213.254 159.401C215.756 159.88 218.179 160.721 220.914 161.529C223.564 162.311 226.422 163.03 229.404 163.03V159.03C227.028 159.03 224.63 158.456 222.047 157.693C219.55 156.955 216.765 156 214.005 155.472L213.254 159.401Z";
 const P_FT="M128.958 173.373L127.423 177.067L127.43 177.07L127.437 177.073L128.958 173.373ZM125.966 159.801L129.955 160.094V160.094L125.966 159.801ZM126.809 158.915L127.399 162.871H127.399L126.809 158.915ZM341.212 158.915L341.802 154.958L341.802 154.958L341.212 158.915ZM342.055 159.801L346.044 159.507V159.507L342.055 159.801ZM339.063 173.373L340.584 177.073L340.591 177.07L340.598 177.067L339.063 173.373ZM183.545 229.871C198.524 229.871 210.468 225.496 218.581 216.191C226.604 206.989 230.295 193.625 230.295 176.855H222.295C222.295 192.617 218.805 203.761 212.551 210.934C206.386 218.004 196.956 221.871 183.545 221.871V229.871ZM128.718 180.475C128.718 192.227 132.294 204.634 141.159 214.139C150.087 223.71 163.941 229.871 183.545 229.871V221.871C165.69 221.871 154.131 216.317 147.01 208.682C139.826 200.981 136.718 190.69 136.718 180.475H128.718ZM127.437 177.073C128.6 177.551 128.434 177.587 128.347 177.46C128.324 177.427 128.718 177.98 128.718 180.475H136.718C136.718 177.487 136.312 174.933 134.948 172.942C133.521 170.857 131.475 170.083 130.48 169.674L127.437 177.073ZM121.977 159.507C121.813 161.734 121.789 165.118 122.247 168.217C122.475 169.754 122.849 171.424 123.499 172.899C124.109 174.284 125.258 176.167 127.423 177.067L130.494 169.68C131.131 169.945 131.105 170.32 130.82 169.675C130.576 169.12 130.337 168.236 130.161 167.046C129.813 164.689 129.821 161.922 129.955 160.094L121.977 159.507ZM126.219 154.958C124.039 155.284 122.156 157.068 121.977 159.507L129.955 160.094C129.843 161.624 128.678 162.68 127.399 162.871L126.219 154.958ZM214.381 153.508C187.549 148.374 166.885 148.891 126.219 154.958L127.399 162.871C167.634 156.868 187.294 156.47 212.878 161.365L214.381 153.508ZM229.404 165.03H238.617V157.03H229.404V165.03ZM255.143 161.365C280.727 156.47 300.387 156.868 340.622 162.871L341.802 154.958C301.136 148.891 280.472 148.374 253.64 153.508L255.143 161.365ZM340.622 162.871C339.343 162.68 338.178 161.624 338.066 160.094L346.044 159.507C345.865 157.068 343.982 155.284 341.802 154.958L340.622 162.871ZM338.066 160.094C338.2 161.922 338.208 164.689 337.86 167.046C337.684 168.236 337.445 169.12 337.201 169.675C336.916 170.32 336.89 169.945 337.527 169.68L340.598 177.067C342.763 176.167 343.912 174.284 344.522 172.899C345.172 171.424 345.546 169.754 345.774 168.217C346.232 165.118 346.208 161.734 346.044 159.507L338.066 160.094ZM337.541 169.674C336.546 170.083 334.5 170.857 333.072 172.942C331.709 174.933 331.303 177.487 331.303 180.475H339.303C339.303 177.98 339.697 177.427 339.674 177.46C339.587 177.587 339.421 177.551 340.584 177.073L337.541 169.674ZM331.303 180.475C331.303 190.69 328.195 200.981 321.011 208.682C313.89 216.317 302.331 221.871 284.476 221.871V229.871C304.08 229.871 317.934 223.71 326.862 214.139C335.727 204.634 339.303 192.227 339.303 180.475H331.303ZM284.476 221.871C271.065 221.871 261.635 218.004 255.47 210.934C249.216 203.761 245.726 192.617 245.726 176.855H237.726C237.726 193.625 241.417 206.989 249.44 216.191C257.553 225.496 269.497 229.871 284.476 229.871V221.871ZM239.11 169.908H228.911V177.908H239.11V169.908ZM245.703 177.286C246.122 173.415 243.118 169.908 239.11 169.908V177.908C238.244 177.908 237.668 177.17 237.749 176.423L245.703 177.286ZM238.617 165.03C241.902 165.03 244.991 164.239 247.673 163.447C250.527 162.604 252.769 161.819 255.143 161.365L253.64 153.508C250.752 154.06 247.786 155.072 245.407 155.775C242.858 156.528 240.691 157.03 238.617 157.03V165.03ZM228.911 169.908C224.903 169.908 221.898 173.415 222.318 177.286L230.272 176.423C230.352 177.17 229.777 177.908 228.911 177.908V169.908ZM212.878 161.365C215.251 161.819 217.494 162.604 220.348 163.447C223.03 164.239 226.119 165.03 229.404 165.03V157.03C227.33 157.03 225.163 156.528 222.614 155.775C220.235 155.072 217.269 154.06 214.381 153.508L212.878 161.365Z";
 /* face anchors in the 347x340 space */
+const TEAR="#BFE6FF";
 const EYE_L=[183,190], EYE_R=[287,190], MOUTH=[229,241];
 
 function defs(id,shadow){
@@ -233,10 +236,12 @@ function eyes(e,id){
     case "visor":return `<rect x="128" y="160" width="214" height="56" rx="28" fill="${k}" stroke="${k}" stroke-width="8"/><rect x="164" y="183" width="142" height="11" rx="5.5" fill="#FF3B4E"/><rect x="172" y="185" width="40" height="4" rx="2" fill="#fff" opacity=".85"/>`;
     case "big":return both((x,y)=>`<ellipse cx="${x}" cy="${y}" rx="30" ry="36" fill="#fff" stroke="${k}" stroke-width="8"/><circle cx="${x+5}" cy="${y+7}" r="14" fill="${k}"/><circle cx="${x+10}" cy="${y}" r="5" fill="#fff"/>`);
     case "hearts":return both((x,y)=>heart(x,y+4,2.3,"#FF3B4E")+`<circle cx="${x-13}" cy="${y-10}" r="4.5" fill="#fff"/>`);
-    case "happy":return both((x,y)=>`<path d="M${x-24} ${y+10} Q${x} ${y-22} ${x+24} ${y+10}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`);
+    case "happy":return both((x,y)=>`<path d="M${x-16} ${y+8} A16 16 0 0 1 ${x+16} ${y+8}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`);
+    case "laughing":return both((x,y,d)=>`<path d="M${x-16} ${y+8} A16 16 0 0 1 ${x+16} ${y+8}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/><path d="M${x+22*d} ${y-30} C${x+6*d} ${y-42} ${x-24*d} ${y-32} ${x-30*d} ${y-12}" stroke="${k}" stroke-width="11" stroke-linecap="round" fill="none"/><path transform="translate(${x+42*d} ${y+20}) scale(${d} 1)" d="M0 -22 C6 -12 16 2 16 12 C16 22 9 28 0 28 C-9 28 -16 22 -16 12 C-16 2 -6 -12 0 -22 Z" fill="${TEAR}" stroke="${k}" stroke-width="6" stroke-linejoin="round"/>`);
     case "wink":return `<ellipse cx="${lx}" cy="${ly}" rx="15" ry="20" fill="${k}"/><circle cx="${lx+5}" cy="${ly-7}" r="4.5" fill="#fff"/><path d="M${rx-24} ${ry+4} Q${rx} ${ry-18} ${rx+24} ${ry+4}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`;
-    case "crying":return both((x,y)=>`<rect x="${x-15}" y="${y+4}" width="30" height="72" rx="15" fill="#8FD3FF" stroke="${k}" stroke-width="7"/><path d="M${x-24} ${y-4} Q${x} ${y+16} ${x+24} ${y-4}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`);
-    case "angry":return both((x,y,d)=>`<ellipse cx="${x}" cy="${y+6}" rx="22" ry="16" fill="#fff" stroke="${k}" stroke-width="7"/><circle cx="${x}" cy="${y+8}" r="8" fill="#E0202F"/><path d="M${x+28*d} ${y-24} L${x-26*d} ${y-6}" stroke="${k}" stroke-width="11" stroke-linecap="round"/>`);
+    case "crying":return both((x,y)=>`<path d="M${x-16} ${y+6} H${x-8} Q${x-16} ${y+6} ${x-16} ${y+14} V${y+150} H${x+16} V${y+14} Q${x+16} ${y+6} ${x+8} ${y+6} Z" fill="${TEAR}" stroke="${k}" stroke-width="8" stroke-linejoin="round"/><rect x="${x-12}" y="${y+132}" width="24" height="22" fill="${TEAR}"/><path d="M${x+24} ${y+8} C${x+15} ${y-9} ${x-16} ${y-8} ${x-24} ${y+8}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`);
+    case "sleepy":return both((x,y)=>`<path d="M${x-22} ${y+2} Q${x} ${y+16} ${x+22} ${y+2}" stroke="${k}" stroke-width="9" stroke-linecap="round" fill="none"/><path d="M${x-14} ${y+11} L${x-18} ${y+19} M${x} ${y+14} L${x} ${y+22} M${x+14} ${y+11} L${x+18} ${y+19}" stroke="${k}" stroke-width="4.5" stroke-linecap="round"/>`);
+    case "angry":return both((x,y,d)=>{const a=d<0?[x-21,y-6,x+21,y+3]:[x-21,y+3,x+21,y-6];return `<path d="M${a[0]} ${a[1]} L${a[2]} ${a[3]} A21.5 21.5 0 0 1 ${a[0]} ${a[1]} Z" fill="#fff" stroke="${k}" stroke-width="8" stroke-linejoin="round"/><circle cx="${x-3*d}" cy="${y+8}" r="6" fill="${k}"/><path d="M${x+30*d} ${y-24} L${x-28*d} ${y-10}" stroke="${k}" stroke-width="12" stroke-linecap="round"/>`;});
     case "glasses":return `<path d="M${lx+32} ${ly} H${rx-32}" stroke="${k}" stroke-width="8"/><path d="M${lx-32} ${ly-6} L80 170" stroke="${k}" stroke-width="7" stroke-linecap="round"/>`+both((x,y)=>`<circle cx="${x}" cy="${y}" r="32" fill="#fff" fill-opacity=".55" stroke="${k}" stroke-width="9"/><circle cx="${x+3}" cy="${y+3}" r="10" fill="${k}"/>`);
     case "dizzy":return both((x,y)=>`<path d="M${x-16} ${y-16} L${x+16} ${y+16} M${x+16} ${y-16} L${x-16} ${y+16}" stroke="${k}" stroke-width="10" stroke-linecap="round"/>`);
     case "stars":return both((x,y)=>star5(x,y+2,30,"#FFD447"));
@@ -247,22 +252,50 @@ function mouth(m){
   const [x,y]=MOUTH,k=INK;
   switch(m){
     case "hi":return `<path id="Mouth" d="${P_MOUTH}" fill="${k}"/>`;
-    case "smile":return `<path d="M${x-26} ${y-6} Q${x} ${y+22} ${x+26} ${y-6}" stroke="${k}" stroke-width="9" stroke-linecap="round" fill="none"/>`;
-    case "grin":return `<rect x="${x-38}" y="${y-14}" width="76" height="32" rx="10" fill="#fff" stroke="${k}" stroke-width="7"/>`+[-19,0,19].map(d=>`<path d="M${x+d} ${y-14} V${y+18}" stroke="${k}" stroke-width="5"/>`).join("")+`<path d="M${x-38} ${y+2} H${x+38}" stroke="${k}" stroke-width="5"/>`;
-    case "wow":return `<ellipse cx="${x}" cy="${y+6}" rx="20" ry="26" fill="${k}"/><ellipse cx="${x}" cy="${y+18}" rx="12" ry="9" fill="#FF6B7A"/>`;
+    case "smile":return `<path d="M${x-24} ${y-6} Q${x} ${y+20} ${x+24} ${y-6}" stroke="${k}" stroke-width="10" stroke-linecap="round" fill="none"/>`;
+    case "grin":return `<g transform="translate(${x} ${y-6}) scale(.62) translate(-222 -230)"><path d="M282 230C288.627 230 294.125 235.396 293.32 241.975C289.97 269.374 273.261 290 222 290C170.739 290 154.03 269.374 150.68 241.975C149.875 235.396 155.373 230 162 230H282Z" fill="#4A4A4E" stroke="${k}" stroke-width="10"/><path d="M272.25 278.663C261.242 285.796 245.142 290 222 290C175.551 290 157.472 273.065 151.994 249.5C173.25 239.75 249 249.5 272.25 278.663Z" fill="#FF55A2" stroke="${k}" stroke-width="10"/><path d="M180 234.5C180 232.015 182.015 230 184.5 230H211.5C213.985 230 216 232.015 216 234.5V248C216 254.627 210.627 260 204 260H192C185.373 260 180 254.627 180 248V234.5Z" fill="white" stroke="${k}" stroke-width="10"/><path d="M216 234.5C216 232.015 218.015 230 220.5 230H247.5C249.985 230 252 232.015 252 234.5V248C252 254.627 246.627 260 240 260H228C221.373 260 216 254.627 216 248V234.5Z" fill="white" stroke="${k}" stroke-width="10"/></g>`;
+    case "teeth":return `<rect x="${x-40}" y="${y-10}" width="80" height="26" rx="13" fill="${k}"/>`+[-25,-11,3,17].map(d=>`<rect x="${x+d}" y="${y-10}" width="8" height="26" fill="#fff"/>`).join("")+`<rect x="${x-40}" y="${y-10}" width="80" height="26" rx="13" fill="none" stroke="${k}" stroke-width="6"/>`;
+    case "o":return `<ellipse cx="${x}" cy="${y+4}" rx="11" ry="12" fill="${k}"/><ellipse cx="${x}" cy="${y+9}" rx="6" ry="4" fill="#FF6B7A"/>`;
+    case "wow":return `<g transform="translate(${x} ${y+2}) scale(.55) translate(-230 -254)"><path d="M256.5 286C262.851 286 268.069 280.831 267.39 274.516C264.177 244.65 248.659 222 230 222C211.341 222 195.823 244.65 192.61 274.516C191.931 280.831 197.149 286 203.5 286H256.5Z" fill="${k}"/><path d="M254 286C254 273.85 242.359 264 228 264C213.641 264 202 273.85 202 286H254Z" fill="#FF3979"/></g>`;
     case "tongue":return `<path d="${P_MOUTH}" fill="${k}"/><path d="M${x-14} ${y+5} Q${x} ${y-4} ${x+14} ${y+5} Q${x+14} ${y+15} ${x} ${y+15} Q${x-14} ${y+15} ${x-14} ${y+5} Z" fill="#FF6B7A"/>`;
     case "flat":return `<path d="M${x-22} ${y+2} H${x+22}" stroke="${k}" stroke-width="9" stroke-linecap="round"/>`;
   }
   return "";
 }
 function topper(t){
-  const o=`stroke="${INK}" stroke-width="8" stroke-linejoin="round"`;
+  const K=INK, o=`stroke="${K}" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"`;
   switch(t){
-    case "party":return `<g transform="rotate(14 200 10)"><path d="M168 14 L204 -66 L240 14 Z" fill="#5DB8FF" ${o}/><path d="M184 -20 L226 -12 M196 -46 L218 -42" stroke="#FFD447" stroke-width="9" stroke-linecap="round"/><circle cx="204" cy="-72" r="11" fill="#FFD447" ${o}/></g>`;
-    case "crown":return `<path d="M150 22 L156 -32 L180 -6 L198 -44 L216 -6 L240 -32 L246 22 Z" fill="#FFD447" ${o}/><circle cx="198" cy="8" r="7" fill="#FF3B4E" stroke="${INK}" stroke-width="5"/><path d="M166 0 L170 14" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`;
-    case "halo":return `<ellipse cx="196" cy="-22" rx="62" ry="15" fill="none" stroke="${INK}" stroke-width="16"/><ellipse cx="196" cy="-22" rx="62" ry="15" fill="none" stroke="#FFD447" stroke-width="8"/>`;
-    case "bow":return `<g transform="translate(196 6)"><path d="M0 0 L-40 -26 Q-50 0 -40 26 Z" fill="#FF5AA0" ${o}/><path d="M0 0 L40 -26 Q50 0 40 26 Z" fill="#FF5AA0" ${o}/><circle r="12" fill="#FF8FC4" ${o}/></g>`;
-    case "cap":return `<path d="M128 40 Q134 -14 196 -14 Q258 -14 262 40 Z" fill="#FF3B4E" ${o}/><path d="M250 36 Q300 30 318 46 Q300 54 250 50 Z" fill="#D42433" ${o}/><circle cx="196" cy="-14" r="7" fill="#D42433" stroke="${INK}" stroke-width="5"/>`;
+    case "party":return `<g transform="rotate(-10 190 70)">
+<path d="M128 74 Q190 94 252 74 L198 -60 Z" fill="#5DB8FF" ${o}/>
+<path d="M152 30 Q192 44 233 30" stroke="#FFD447" stroke-width="10" fill="none"/>
+<path d="M173 -10 Q195 -1 217 -10" stroke="#FFD447" stroke-width="9" fill="none"/>
+<path d="M128 74 Q190 94 252 74 L198 -60 Z" fill="none" ${o}/>
+<path d="M156 52 L180 -8" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+<circle cx="198" cy="-66" r="14" fill="#FF8FC4" ${o}/><circle cx="194" cy="-70" r="4" fill="#fff"/></g>`;
+    case "crown":return `<g transform="rotate(-6 190 50)">
+<path d="M116 80 L116 40 L136 -6 L162 28 L190 -24 L218 28 L244 -6 L264 40 L264 80 Q190 94 116 80 Z" fill="#FFD447" ${o}/>
+<path d="M118 58 Q190 72 262 58" stroke="#E9A800" stroke-width="7" fill="none"/>
+<circle cx="190" cy="50" r="10" fill="#FF3B4E" stroke="${K}" stroke-width="5"/><circle cx="148" cy="56" r="6.5" fill="#5DB8FF" stroke="${K}" stroke-width="4"/><circle cx="232" cy="56" r="6.5" fill="#56C487" stroke="${K}" stroke-width="4"/>
+<path d="M130 42 L130 64" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+<circle cx="136" cy="-6" r="6" fill="#FFD447" ${o}/><circle cx="190" cy="-24" r="6" fill="#FFD447" ${o}/><circle cx="244" cy="-6" r="6" fill="#FFD447" ${o}/></g>`;
+    case "halo":return `<g transform="rotate(-6 196 -8)"><ellipse cx="196" cy="-8" rx="72" ry="17" fill="none" stroke="${K}" stroke-width="18"/><ellipse cx="196" cy="-8" rx="72" ry="17" fill="none" stroke="#FFD447" stroke-width="9"/><path d="M146 -18 Q160 -24 178 -25" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/></g>`;
+    case "bow":return `<g transform="translate(286 72) rotate(20)">
+<path d="M0 0 C-14 -30 -52 -34 -50 -6 C-48 18 -14 16 0 0 Z" fill="#FF5AA0" ${o}/>
+<path d="M0 0 C14 -30 52 -34 50 -6 C48 18 14 16 0 0 Z" fill="#FF5AA0" ${o}/>
+<path d="M-34 -16 Q-30 -22 -22 -22 M20 -22 Q28 -22 32 -16" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".8"/>
+<rect x="-12" y="-13" width="24" height="24" rx="9" fill="#FF8FC4" ${o}/></g>`;
+    case "cap":return `<g transform="rotate(-4 190 40)">
+<path d="M104 84 Q100 -12 190 -14 Q278 -12 274 80 Q190 66 104 84 Z" fill="#FF5A6E" ${o}/>
+<path d="M190 -12 Q184 30 188 72" stroke="${K}" stroke-width="4" fill="none" opacity=".35"/>
+<path d="M126 44 Q130 10 158 -2" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".75"/>
+<path d="M250 72 Q318 50 344 76 Q306 98 244 88 Z" fill="#E33A50" ${o}/>
+<circle cx="190" cy="-15" r="8" fill="#E33A50" stroke="${K}" stroke-width="5"/></g>`;
+    case "beanie":return `<g transform="rotate(-5 190 50)">
+<path d="M98 90 Q94 -8 190 -12 Q286 -8 282 90 Z" fill="#FFB347" ${o}/>
+<path d="M92 66 Q190 46 288 66 L290 102 Q190 82 90 102 Z" fill="#FF8A1F" ${o}/>
+${[112,136,160,184,208,232,256].map(x=>`<path d="M${x+4} ${60-(x>190?(x-190)/6:(190-x)/6)*0.4} L${x+4} ${90}" stroke="${K}" stroke-width="3.5" opacity=".3"/>`).join("")}
+<path d="M122 40 Q128 12 156 0" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".7"/>
+<circle cx="190" cy="-22" r="22" fill="#FFF4E0" ${o}/><circle cx="182" cy="-30" r="6" fill="#fff"/></g>`;
   }
   return "";
 }
@@ -270,6 +303,7 @@ function extras(x){
   let s="";
   if(x.blush) s+=`<ellipse cx="150" cy="238" rx="20" ry="11" fill="#FF7E9D" opacity=".55"/><ellipse cx="310" cy="238" rx="20" ry="11" fill="#FF7E9D" opacity=".55"/>`;
   if(x.bandage) s+=`<g transform="rotate(-30 252 126)"><rect x="216" y="112" width="72" height="28" rx="11" fill="#F7D9A8" stroke="${INK}" stroke-width="6"/><rect x="241" y="112" width="22" height="28" fill="#E9BC7A" stroke="${INK}" stroke-width="5"/></g>`;
+  if(x.zzz){const Z=(zx,zy,s)=>`<path d="M${zx} ${zy} h${s} l-${s} ${s} h${s}" stroke="${INK}" stroke-width="${Math.max(4,s/4)}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;s+=Z(300,58,30)+Z(338,22,20)+Z(364,0,13);}
   if(x.sweat) s+=`<path d="M318 92 C330 112 336 124 326 134 C316 142 302 134 305 120 C307 110 312 102 318 92 Z" fill="#8FD3FF" stroke="${INK}" stroke-width="6"/>`;
   if(x.hearts) s+=heart(300,38,1.9,"#FF3B4E")+heart(334,86,1.3,"#FF7E9D");
   if(x.sparkles){const st=(cx,cy,r,c)=>`<path d="M${cx} ${cy-r} Q${cx} ${cy} ${cx+r} ${cy} Q${cx} ${cy} ${cx} ${cy+r} Q${cx} ${cy} ${cx-r} ${cy} Q${cx} ${cy} ${cx} ${cy-r} Z" fill="${c}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`;
@@ -281,7 +315,7 @@ function draw(c,withBg){
   const p=PAL[c.color], x=c.extras||{}, id=++uid, sh=x.shadow!==false;
   const vb="-20 -90 387 440";
   const bg=(withBg&&BG[c.bg])?`<rect x="-20" y="-90" width="387" height="440" fill="${BG[c.bg]}"/>`:"";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh)}${bg}<g id="cold-flame">${flame(p,id,sh)}${mouth(c.mouth)}${eyes(c.eyes,id)}${x.ear!==false?ear(p,id,sh):""}${topper(c.top)}${extras(x)}</g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="387" height="440" fill="none">${defs(id,sh)}${bg}<g id="cold-flame">${c.eyes==="crying"?`<path d="M30 338 Q189 312 348 338 Q189 364 30 338 Z" fill="${TEAR}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>`:""}${flame(p,id,sh)}${mouth(c.mouth)}${eyes(c.eyes,id)}${x.ear!==false?ear(p,id,sh):""}${topper(c.top)}${extras(x)}</g></svg>`;
 }
 
 /* ---------- UI (Figma-like) ---------- */

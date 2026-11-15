@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/blu-hello.svg" width="720" alt="Blu, a blue flame with sunglasses, floating and switching between moods: cool, in love, partying and champion">
+  <img src="assets/blu-hello.svg" width="720" alt="Blu, a blue flame with sunglasses, floating, peeking over his shades and blinking">
 </p>
 
 <h1 align="center">Blu Studio</h1>
@@ -24,7 +24,7 @@ He started as one illustration. Then we needed him happy for a "you passed!" scr
 Blu Studio is the shortcut. You pick the mood, and he's ready.
 
 <p align="center">
-  <img src="assets/lineup.svg" alt="Six versions of Blu: with sunglasses, in love, partying, as a champion with a crown, crying, and angry in red">
+  <img src="assets/lineup.svg" alt="Eight versions of Blu: Blu, Crush, Party, Proud, Sleepy, Oops, Cheeky and Grumpy">
 </p>
 
 ## What you can change
@@ -32,13 +32,13 @@ Blu Studio is the shortcut. You pick the mood, and he's ready.
 | | |
 |---|---|
 | **Colour** | Brand blue plus seven more. Each recolours his three flame tones and his ear together, so he always looks like himself. |
-| **Eyes** | His original shades, or visor, big eyes, hearts, happy, wink, crying, angry, glasses, dizzy and star eyes. |
-| **Mouth** | His original smirk, or smile, grin, wow, tongue, flat, or none. |
-| **On top** | Party hat, crown, halo, bow or cap. |
-| **Extras** | Ear knob, inner shadow, blush, floating hearts, sweat drop, sparkles, bandage. |
+| **Eyes** | His original shades, or visor, big eyes, hearts, happy, laughing, wink, sleepy, crying, angry, glasses, dizzy and star eyes. |
+| **Mouth** | His original smirk, or smile, laugh, gritted teeth, wow, a little o, tongue, flat, or none. |
+| **On top** | Cap, beanie, party hat, crown, hair bow or halo. Hats sit on his head, with a flame tip or two poking out. |
+| **Extras** | Ear knob, inner shadow, blush, floating hearts, sweat drop, sparkles, Zzz, bandage. |
 | **Background** | A coloured tile, or transparent. |
 
-There are six starting points (Blu, In love, Party, Champion, Oops, Angry red), a "Surprise me" button for when you need ideas, and a little shelf to save the versions you like. Saved versions stay in your browser.
+There are eight starting points (Blu, Crush, Party, Proud, Sleepy, Oops, Cheeky, Grumpy), a "Surprise me" button for when you need ideas, and a little shelf to save the versions you like. Saved versions stay in your browser.
 
 ## Getting him into your work
 
@@ -59,7 +59,7 @@ Blu is built from the original vector paths of his Figma component, not traced o
 | Ear knob | `#6FB2E8`, with the inner tone as its centre |
 | Shine | White strokes only, never gradients |
 
-If you add something new to him, keep to flat colours, the same outline weight, and a white shine. That's what makes him look like Blu and not a sticker someone else drew.
+If you add something new to him, keep to flat colours, the same outline weight, and a white shine. Eyes and mouths are thick strokes with round ends, tears are wide light-blue rivers with an outline, and open mouths are dark with a pink tongue. That's what makes him look like Blu and not a sticker someone else drew.
 
 ## Running it locally
 
