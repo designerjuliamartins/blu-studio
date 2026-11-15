@@ -24,7 +24,7 @@ He started as one illustration. Then we needed him happy for a "you passed!" scr
 Blu Studio is the shortcut. You pick the mood, and he's ready.
 
 <p align="center">
-  <img src="assets/lineup.svg" alt="Eight versions of Blu: Blu, Crush, Party, Lovely, Smooch, Shook, Oops and Grumpy">
+  <img src="assets/lineup.svg" alt="Eight versions of Blu: Blu, Crush, Party, Lovely, Smooch, Shook, Chill and Grumpy">
 </p>
 
 ## What you can change
@@ -32,13 +32,13 @@ Blu Studio is the shortcut. You pick the mood, and he's ready.
 | | |
 |---|---|
 | **Colour** | Brand blue plus seven more. Each recolours his three flame tones and his ear together, so he always looks like himself. |
-| **Eyes** | His original shades, or googly, hearts, happy, laughing, wink, shocked, crying and angry. |
-| **Mouth** | His original smirk, or smile, sweet, laugh, kiss, open, scream, gritted, or none. |
+| **Eyes** | His original shades, or googly, hearts, happy, laughing, wink, shocked and angry. |
+| **Mouth** | His original smirk, or smile, sweet, laugh, kiss, scream, gritted, or none. |
 | **On top** | Cap, beanie, party hat, crown, hair bow or halo. Hats sit on his head, with a flame tip or two poking out. |
 | **Extras** | Ear knob, inner shadow, blush, floating hearts, sparkles, Zzz, sweat drop. |
 | **Background** | A coloured tile, or transparent. |
 
-There are eight starting points (Blu, Crush, Party, Lovely, Smooch, Shook, Oops, Grumpy), a "Surprise me" button for when you need ideas, and a little shelf to save the versions you like. Saved versions stay in your browser.
+There are eight starting points (Blu, Crush, Party, Lovely, Smooch, Shook, Chill, Grumpy), a "Surprise me" button for when you need ideas, and a little shelf to save the versions you like. Saved versions stay in your browser.
 
 ## Getting him into your work
 
@@ -53,11 +53,12 @@ Blu is built from the original vector paths of his Figma component, not traced o
 | Part | Value |
 |---|---|
 | Outline | `#1F2024`, 8 px, round joins |
-| Flame, outer | `#4795E0` with a soft inner shadow on the right |
+| Flame, outer | `#4795E0` with a darker crescent on the right for depth |
 | Flame, middle | `#9BCEF1` |
 | Flame, inner | `#CAE9FA` |
 | Ear knob | `#6FB2E8`, with the inner tone as its centre |
 | Shine | White strokes only, never gradients |
+| Shadows | Flat offset shapes, never blur, so he stays sharp at any size |
 
 If you add something new to him, keep to flat colours, the same outline weight, and a white shine. That's what makes him look like Blu and not a sticker someone else drew.
 
