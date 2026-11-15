@@ -24,7 +24,7 @@ He started as one illustration. Then we needed him happy for a "you passed!" scr
 Blu Studio is the shortcut. You pick the mood, and he's ready.
 
 <p align="center">
-  <img src="assets/lineup.svg" alt="Eight versions of Blu: Blu, Crush, Party, Proud, Sleepy, Oops, Cheeky and Grumpy">
+  <img src="assets/lineup.svg" alt="Eight versions of Blu: Blu, Crush, Party, Lovely, Smooch, Shook, Oops and Grumpy">
 </p>
 
 ## What you can change
@@ -32,13 +32,13 @@ Blu Studio is the shortcut. You pick the mood, and he's ready.
 | | |
 |---|---|
 | **Colour** | Brand blue plus seven more. Each recolours his three flame tones and his ear together, so he always looks like himself. |
-| **Eyes** | His original shades, or visor, big eyes, hearts, happy, laughing, wink, sleepy, crying, angry, glasses, dizzy and star eyes. |
-| **Mouth** | His original smirk, or smile, laugh, gritted teeth, wow, a little o, tongue, flat, or none. |
+| **Eyes** | His original shades, or googly, hearts, happy, laughing, wink, shocked, crying and angry. |
+| **Mouth** | His original smirk, or smile, sweet, laugh, kiss, open, scream, gritted, or none. |
 | **On top** | Cap, beanie, party hat, crown, hair bow or halo. Hats sit on his head, with a flame tip or two poking out. |
-| **Extras** | Ear knob, inner shadow, blush, floating hearts, sweat drop, sparkles, Zzz, bandage. |
+| **Extras** | Ear knob, inner shadow, blush, floating hearts, sparkles, Zzz, sweat drop. |
 | **Background** | A coloured tile, or transparent. |
 
-There are eight starting points (Blu, Crush, Party, Proud, Sleepy, Oops, Cheeky, Grumpy), a "Surprise me" button for when you need ideas, and a little shelf to save the versions you like. Saved versions stay in your browser.
+There are eight starting points (Blu, Crush, Party, Lovely, Smooch, Shook, Oops, Grumpy), a "Surprise me" button for when you need ideas, and a little shelf to save the versions you like. Saved versions stay in your browser.
 
 ## Getting him into your work
 
@@ -48,7 +48,7 @@ There are eight starting points (Blu, Crush, Party, Proud, Sleepy, Oops, Cheeky,
 
 ## How Blu is drawn
 
-Blu is built from the original vector paths of his Figma component, not traced or redrawn, so the default version matches the brand file exactly. Every new expression is drawn on top of that body, following his rules:
+Blu is built from the original vector paths of his Figma component, not traced or redrawn, so the default version matches the brand file exactly. His new eyes and mouths come from the same illustrator's Emojibotos set, placed on his face so every expression is in the original hand. Hats and colours follow his rules:
 
 | Part | Value |
 |---|---|
@@ -59,7 +59,7 @@ Blu is built from the original vector paths of his Figma component, not traced o
 | Ear knob | `#6FB2E8`, with the inner tone as its centre |
 | Shine | White strokes only, never gradients |
 
-If you add something new to him, keep to flat colours, the same outline weight, and a white shine. Eyes and mouths are thick strokes with round ends, tears are wide light-blue rivers with an outline, and open mouths are dark with a pink tongue. That's what makes him look like Blu and not a sticker someone else drew.
+If you add something new to him, keep to flat colours, the same outline weight, and a white shine. That's what makes him look like Blu and not a sticker someone else drew.
 
 ## Running it locally
 
@@ -75,7 +75,7 @@ To teach Blu a new expression, look for the `eyes()` and `mouth()` functions in 
 
 ## Credits
 
-Blu's body, sunglasses and smirk come from the **cold-flame** character in the [Emojibotos](https://www.figma.com/community/search?resource_type=mixed&sort_by=relevancy&query=emojibotos) file on the Figma Community. All credit for the original character goes to its creator. The editor, the extra expressions and accessories, and the colour variations were made for this project.
+Blu's body, sunglasses and smirk, and the eyes and mouths of his other moods, come from the **cold-flame** and other characters in the [Emojibotos](https://www.figma.com/community/search?resource_type=mixed&sort_by=relevancy&query=emojibotos) file on the Figma Community. All credit for the original character goes to its creator. The editor, the hats, the colour variations and the way the pieces fit on Blu were made for this project.
 
 The code is MIT licensed. The character artwork follows the licence of the original Community file.
 
