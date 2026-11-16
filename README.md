@@ -5,7 +5,7 @@
 <h1 align="center">Blu Studio</h1>
 
 <p align="center">
-  A tiny editor for making new versions of Blu, our brand mascot,<br>
+  A tiny editor for making new versions of Blu, the mascot of ENT Games,<br>
   without redrawing him every time.
 </p>
 
@@ -17,9 +17,11 @@
 
 ## Meet Blu
 
-Blu is a small blue flame who never gets too hot about anything. He wears his sunglasses indoors, smiles with half his mouth, and keeps a little knob on the side of his head that nobody has ever explained.
+Blu is a character from one of the brands I've worked with: **ENT Games**, a corporate training app where employees learn through short lessons and quizzes. He was created to bring more life to the screens and to the learning process itself. He cheers when you get an answer right, offers a tip when you're stuck, celebrates when you finish a lesson, and turns into a different version of himself for each course.
 
-He started as one illustration. Then we needed him happy for a "you passed!" screen, crying for an empty state, wearing a party hat for a launch post, and in red for a "wrong answer" moment. Every new mood meant opening Figma, duplicating him, and nudging eyes around by hand.
+He's a small blue flame who never gets too hot about anything. He wears his sunglasses indoors, smiles with half his mouth, and keeps a little knob on the side of his head that nobody has ever explained.
+
+He started as one illustration. Then we needed him happy for a "you passed!" screen, wearing a party hat on the results screen, dressed as each course, and in red for a "wrong answer" moment. Every new mood meant opening Figma, duplicating him, and nudging eyes around by hand.
 
 Blu Studio is the shortcut. You pick the mood, and he's ready.
 
